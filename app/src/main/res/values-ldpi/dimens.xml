@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_l">22sp</dimen>
+    <dimen name="text_size_m">16sp</dimen>
+    <dimen name="line_height_l">26sp</dimen>
+    <dimen name="line_height_m">18sp</dimen>
+    <dimen name="corner_radius">16dp</dimen>
+    <dimen name="indent_l">18dp</dimen>
+    <dimen name="indent_m">16dp</dimen>
+    <dimen name="indent_s">12dp</dimen>
+    <dimen name="icon_indent">8dp</dimen>
+</resources>

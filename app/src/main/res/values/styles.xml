@@ -2,35 +2,39 @@
 <resources>
 
     <style name="BtnMainOption">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
         <item name="android:lineHeight">@dimen/line_height_l</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/text_size_l</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="cornerRadius">@dimen/corner_radius</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/icon_indent</item>
-        <item name="iconTint">@color/black</item>
+        <item name="iconTint">?attr/colorOnPrimary</item>
     </style>
 
     <style name="Title">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">40dp</item>
         <item name="android:lineHeight">@dimen/line_height_l</item>
         <item name="android:textSize">@dimen/text_size_l</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textFontWeight">500</item>
     </style>
 
     <style name="BtnSettingsOption">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">?attr/colorSecondary</item>
         <item name="android:lineHeight">@dimen/line_height_m</item>
         <item name="android:stateListAnimator">@null</item>
         <item name="android:textAlignment">textStart</item>
@@ -39,10 +43,15 @@
         <item name="android:paddingVertical">@dimen/indent_l</item>
         <item name="android:paddingStart">@dimen/indent_m</item>
         <item name="android:paddingEnd">@dimen/indent_s</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
         <item name="cornerRadius">0dp</item>
         <item name="iconGravity">end</item>
         <item name="iconPadding">@dimen/icon_indent</item>
-        <item name="iconTint">@color/gray</item>
+        <item name="iconTint">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <style name="Switch">
+        <item name="android:thumbTint">@color/gray</item>
+        <item name="android:trackTint">@color/gray_light</item>
     </style>
 </resources>

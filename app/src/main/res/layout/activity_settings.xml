@@ -30,16 +30,19 @@
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Button
+        android:id="@+id/btnShare"
         style="@style/BtnSettingsOption"
         android:text="@string/share"
         app:icon="@drawable/share" />
 
     <Button
+        android:id="@+id/btnSupport"
         style="@style/BtnSettingsOption"
         android:text="@string/support"
         app:icon="@drawable/support" />
 
     <Button
+        android:id="@+id/btnAgreement"
         style="@style/BtnSettingsOption"
         android:text="@string/agreement"
         app:icon="@drawable/chevron_right" />

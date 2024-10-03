@@ -5,16 +5,31 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:background="?attr/colorSecondary"
+    android:orientation="vertical"
     tools:context=".SearchActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back"
         style="@style/Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         app:navigationIcon="@drawable/arrow_left"
         app:navigationIconTint="?attr/colorSecondaryVariant"
         app:title="@string/search" />
+
+    <LinearLayout style="@style/SearchWrapper">
+
+        <EditText
+            android:id="@+id/inputSearch"
+            style="@style/SearchInput"
+            android:drawableStart="@drawable/search"
+            android:hint="@string/search" />
+
+        <ImageButton
+            android:id="@+id/btnClean"
+            style="@style/SearchBtnClean"
+            android:src="@drawable/cross" />
+    </LinearLayout>
+
 
 </LinearLayout>

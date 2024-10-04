@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
+    private var searchText = TEXT
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,6 +30,11 @@ class SearchActivity : AppCompatActivity() {
         val btnBack = findViewById<MaterialToolbar>(R.id.back)
         val inputSearch = findViewById<EditText>(R.id.inputSearch)
         val btnClean = findViewById<ImageButton>(R.id.btnClean)
+
+        if (savedInstanceState != null) {
+            val text = savedInstanceState.getString(SEARCH_TEXT, TEXT)
+            inputSearch.setText(text)
+        }
 
         btnBack.setNavigationOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -57,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // empty
+                searchText = s.toString()
             }
         }
 
@@ -77,5 +84,15 @@ class SearchActivity : AppCompatActivity() {
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(SEARCH_TEXT, searchText)
+        super.onSaveInstanceState(outState)
+    }
+
+    companion object {
+        const val SEARCH_TEXT = "SEARCH_TEXT"
+        const val TEXT = ""
     }
 }

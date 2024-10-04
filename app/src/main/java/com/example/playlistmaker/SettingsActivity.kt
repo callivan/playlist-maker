@@ -38,7 +38,7 @@ class SettingsActivity : AppCompatActivity() {
             intent.type = "text/plane"
             intent.putExtra(
                 Intent.EXTRA_TEXT,
-                "https://practicum.yandex.ru/android-developer/?from=catalog"
+                getString(R.string.share_link)
             )
 
             startActivity(Intent.createChooser(intent, "Share link"))
@@ -47,14 +47,14 @@ class SettingsActivity : AppCompatActivity() {
         btnSupport.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("yourEmail@ya.ru"))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail)))
             intent.putExtra(
                 Intent.EXTRA_SUBJECT,
-                "Сообщение разработчикам и разработчицам приложения Playlist Maker"
+                getString(R.string.mail_subject)
             )
             intent.putExtra(
                 Intent.EXTRA_TEXT,
-                "Спасибо разработчикам и разработчицам за крутое приложение!"
+                getString(R.string.mail_text)
             )
 
             startActivity(intent)
@@ -62,7 +62,7 @@ class SettingsActivity : AppCompatActivity() {
 
         btnAgreement.setOnClickListener {
             val intent =
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://yandex.ru/legal/practicum_offer/"))
+                Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.agreement_link)))
 
             startActivity(intent)
         }

@@ -15,7 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
-    private var searchText = TEXT
+    private var searchText = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +31,8 @@ class SearchActivity : AppCompatActivity() {
         val inputSearch = findViewById<EditText>(R.id.inputSearch)
         val btnClean = findViewById<ImageButton>(R.id.btnClean)
 
-        if (savedInstanceState != null) {
-            val text = savedInstanceState.getString(SEARCH_TEXT, TEXT)
-            inputSearch.setText(text)
-        }
-
         btnBack.setNavigationOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-
-            startActivity(intent)
+            finish()
         }
 
         btnClean.visibility = btnCleanVisibility(inputSearch.text)
@@ -61,10 +54,11 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 btnClean.visibility = btnCleanVisibility(s)
+                searchText = s.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {
-                searchText = s.toString()
+                // empty
             }
         }
 
@@ -91,8 +85,12 @@ class SearchActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        searchText = savedInstanceState.getString(SEARCH_TEXT, "")
+        super.onRestoreInstanceState(savedInstanceState)
+    }
+
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
-        const val TEXT = ""
     }
 }

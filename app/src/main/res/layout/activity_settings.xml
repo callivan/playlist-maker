@@ -12,6 +12,9 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back"
         style="@style/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         app:navigationIcon="@drawable/arrow_left"
         app:navigationIconTint="?attr/colorSecondaryVariant"
         app:title="@string/settings" />
@@ -32,18 +35,24 @@
     <Button
         android:id="@+id/btnShare"
         style="@style/BtnSettingsOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/share"
         app:icon="@drawable/share" />
 
     <Button
         android:id="@+id/btnSupport"
         style="@style/BtnSettingsOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/support"
         app:icon="@drawable/support" />
 
     <Button
         android:id="@+id/btnAgreement"
         style="@style/BtnSettingsOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/agreement"
         app:icon="@drawable/chevron_right" />
 </LinearLayout>

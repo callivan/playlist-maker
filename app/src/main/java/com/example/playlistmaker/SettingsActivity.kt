@@ -28,9 +28,7 @@ class SettingsActivity : AppCompatActivity() {
         val btnAgreement = findViewById<Button>(R.id.btnAgreement)
 
         btnBack.setNavigationOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-
-            startActivity(intent)
+            finish()
         }
 
         btnShare.setOnClickListener {

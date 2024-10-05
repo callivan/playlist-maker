@@ -36,11 +36,7 @@ class MainActivity : AppCompatActivity() {
         btnSearch.setOnClickListener(btnSearchClickListener)
 
         btnMedia.setOnClickListener {
-            val intent = Intent(
-                this, MediaActivity::class.java
-            )
-
-            startActivity(intent)
+            finish()
         }
 
         btnSettings.setOnClickListener {

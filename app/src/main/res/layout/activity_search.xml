@@ -23,6 +23,7 @@
         style="@style/SearchWrapper"
         android:layout_width="match_parent"
         android:layout_height="36dp"
+        android:background="@drawable/rounded_corners"
         android:layout_marginHorizontal="@dimen/indent_m">
 
         <ImageView

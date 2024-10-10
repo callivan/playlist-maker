@@ -8,6 +8,7 @@
 
     <style name="SearchWrapper">
         <item name="android:background">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
         <item name="android:paddingStart">@dimen/indent_s</item>
         <item name="android:paddingEnd">0dp</item>
     </style>

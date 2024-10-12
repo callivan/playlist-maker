@@ -5,21 +5,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/colorSecondary"
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back"
+        style="@style/Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:lineHeight="@dimen/line_height_l"
-        android:textSize="@dimen/text_size_l"
-        android:textStyle="bold"
+        android:layout_marginBottom="40dp"
         app:navigationIcon="@drawable/arrow_left"
+        app:navigationIconTint="?attr/colorSecondaryVariant"
         app:title="@string/settings" />
 
     <Switch
+        style="@style/Switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineHeight="@dimen/line_height_m"
@@ -27,67 +28,31 @@
         android:paddingStart="@dimen/indent_m"
         android:paddingEnd="@dimen/indent_s"
         android:text="@string/theme"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorSecondaryVariant"
         android:textSize="@dimen/text_size_m"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Button
+        android:id="@+id/btnShare"
+        style="@style/BtnSettingsOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:lineHeight="@dimen/line_height_m"
-        android:paddingVertical="@dimen/indent_l"
-        android:paddingStart="@dimen/indent_m"
-        android:paddingEnd="@dimen/indent_s"
-        android:stateListAnimator="@null"
         android:text="@string/share"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_m"
-        app:cornerRadius="0dp"
-        app:icon="@drawable/share"
-        app:iconGravity="end"
-        app:iconPadding="@dimen/icon_indent"
-        app:iconTint="@color/gray" />
+        app:icon="@drawable/share" />
 
     <Button
+        android:id="@+id/btnSupport"
+        style="@style/BtnSettingsOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:lineHeight="@dimen/line_height_m"
-        android:paddingVertical="@dimen/indent_l"
-        android:paddingStart="@dimen/indent_m"
-        android:paddingEnd="@dimen/indent_s"
-        android:stateListAnimator="@null"
         android:text="@string/support"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_m"
-        app:cornerRadius="0dp"
-        app:icon="@drawable/support"
-        app:iconGravity="end"
-        app:iconPadding="@dimen/icon_indent"
-        app:iconTint="@color/gray" />
+        app:icon="@drawable/support" />
 
     <Button
+        android:id="@+id/btnAgreement"
+        style="@style/BtnSettingsOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:lineHeight="@dimen/line_height_m"
-        android:paddingVertical="@dimen/indent_l"
-        android:paddingStart="@dimen/indent_m"
-        android:paddingEnd="@dimen/indent_s"
-        android:stateListAnimator="@null"
         android:text="@string/agreement"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_m"
-        app:cornerRadius="0dp"
-        app:icon="@drawable/chevron_right"
-        app:iconGravity="end"
-        app:iconPadding="@dimen/icon_indent"
-        app:iconTint="@color/gray" />
+        app:icon="@drawable/chevron_right" />
 </LinearLayout>

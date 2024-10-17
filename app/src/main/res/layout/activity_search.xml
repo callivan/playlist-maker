@@ -23,8 +23,9 @@
         style="@style/SearchWrapper"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:background="@drawable/rounded_corners"
-        android:layout_marginHorizontal="@dimen/indent_m">
+        android:layout_marginHorizontal="@dimen/indent_m"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/rounded_corners">
 
         <ImageView
             style="@style/SearchIcon"
@@ -52,5 +53,11 @@
             android:src="@drawable/cross" />
     </FrameLayout>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

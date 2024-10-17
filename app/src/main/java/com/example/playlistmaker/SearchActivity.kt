@@ -1,6 +1,5 @@
 package com.example.playlistmaker
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,49 +18,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.MaterialToolbar
-
-data class Track(
-    val trackName: String,
-    val trackTime: String,
-    val artistName: String,
-    val artWorkUrl100: String
-)
-
-class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private val trackName: TextView = itemView.findViewById(R.id.trackName)
-    private val trackArtist: TextView = itemView.findViewById(R.id.trackArtist)
-    private val trackTime: TextView = itemView.findViewById(R.id.trackTime)
-    private val trackPreview: ImageView = itemView.findViewById(R.id.trackPreview)
-
-    private val glide = Glide.with(itemView)
-
-    fun bind(model: Track) {
-        trackName.text = model.trackName
-        trackArtist.text = model.artistName
-        trackTime.text = model.trackTime
-        glide.load(model.artWorkUrl100).into(trackPreview)
-    }
-
-}
-
-class TrackAdapter(
-    private val news: List<Track>
-) : RecyclerView.Adapter<TrackViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
-        return TrackViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(news[position])
-    }
-
-    override fun getItemCount(): Int {
-        return news.size
-    }
-}
 
 class SearchActivity : AppCompatActivity() {
     private var searchText = ""
@@ -176,5 +132,47 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
+    }
+}
+
+data class Track(
+    val trackName: String,
+    val trackTime: String,
+    val artistName: String,
+    val artWorkUrl100: String
+)
+
+class TrackAdapter(
+    private val news: List<Track>
+) : RecyclerView.Adapter<TrackViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
+        return TrackViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+        holder.bind(news[position])
+    }
+
+    override fun getItemCount(): Int {
+        return news.size
+    }
+}
+
+class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    private val trackName: TextView = itemView.findViewById(R.id.trackName)
+    private val trackArtist: TextView = itemView.findViewById(R.id.trackArtist)
+    private val trackTime: TextView = itemView.findViewById(R.id.trackTime)
+    private val trackPreview: ImageView = itemView.findViewById(R.id.trackPreview)
+
+    private val glide = Glide.with(itemView)
+
+    fun bind(model: Track) {
+        trackName.text = model.trackName
+        trackArtist.text = model.artistName
+        trackTime.text = model.trackTime
+        glide.load(model.artWorkUrl100).into(trackPreview)
     }
 }

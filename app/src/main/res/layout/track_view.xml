@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?><?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/track"
+    style="@style/Track"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/trackPreview"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:contentDescription="@string/track_preview"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/placeholder" />
+
+    <TextView
+        android:id="@+id/trackName"
+        style="@style/TrackName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/chevron"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/trackPreview"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/lorem" />
+
+    <TextView
+        android:id="@+id/trackArtist"
+        style="@style/TrackSmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/circle"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/trackPreview"
+        tools:text="@tools:sample/lorem" />
+
+    <View
+        android:id="@+id/circle"
+        android:layout_width="3dp"
+        android:layout_height="3dp"
+        android:layout_marginHorizontal="5dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?attr/colorOnSecondary"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/trackArtist"
+        app:layout_constraintEnd_toStartOf="@id/trackTime"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/trackArtist"
+        app:layout_constraintTop_toTopOf="@id/trackArtist" />
+
+    <TextView
+        android:id="@+id/trackTime"
+        style="@style/TrackSmallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chevron"
+        app:layout_constraintStart_toEndOf="@id/circle"
+        tools:text="@tools:sample/lorem" />
+
+    <ImageView
+        android:id="@+id/chevron"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@string/icon"
+        android:src="@drawable/chevron_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorOnSecondary" />
+</androidx.constraintlayout.widget.ConstraintLayout>

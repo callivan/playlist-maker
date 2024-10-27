@@ -74,4 +74,25 @@
         <item name="android:tint">@color/gray</item>
         <item name="android:backgroundTint">@color/gray_light</item>
     </style>
+
+    <style name="Track">
+        <item name="android:paddingHorizontal">@dimen/indent_s</item>
+        <item name="android:paddingVertical">@dimen/icon_indent</item>
+    </style>
+
+    <style name="TrackName">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_m</item>
+        <item name="android:lineHeight">@dimen/line_height_m</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <style name="TrackSmallText">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_s</item>
+        <item name="android:lineHeight">@dimen/line_height_s</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
 </resources>

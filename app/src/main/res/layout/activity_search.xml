@@ -42,7 +42,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="40dp"
-            android:hint="@string/search" />
+            android:hint="@string/search"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
 
         <ImageButton
             android:id="@+id/btnClean"
@@ -58,5 +60,62 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <LinearLayout
+            android:id="@+id/empty_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="178dp"
+                android:layout_marginBottom="@dimen/indent_m"
+                android:scaleType="centerCrop"
+                android:src="@drawable/empty" />
+
+            <TextView
+                style="@style/TextError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/empty"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="178dp"
+            android:layout_marginBottom="@dimen/indent_m"
+            android:scaleType="centerCrop"
+            android:src="@drawable/error" />
+
+        <TextView
+            style="@style/TextError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/indent_s"
+            android:layout_marginBottom="@dimen/indent_xxl"
+            android:text="@string/error"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/btnUpdate"
+            style="@style/BtnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/update" />
+
+    </LinearLayout>
 
 </LinearLayout>

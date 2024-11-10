@@ -4,52 +4,24 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.trackReciclerView.Track
+import com.example.playlistmaker.iTunesAPIService.ITunesAPIService
+import com.example.playlistmaker.iTunesAPIService.iTunesResponse
 import com.example.playlistmaker.trackReciclerView.TrackAdapter
 import com.google.android.material.appbar.MaterialToolbar
 
 class SearchActivity : AppCompatActivity() {
     private var searchText = ""
-    private val tracks: List<Track> = listOf(
-        Track(
-            "Smells Like Teen Spirit",
-            "5:01",
-            "Nirvana",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Billie Jean",
-            "4:35",
-            "Michael Jackson",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Stayin' Alive",
-            "4:10",
-            "Bee Gees",
-            "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Whole Lotta Love",
-            "5:33",
-            "Led Zeppelin",
-            "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Sweet Child O'Mine",
-            "5:03",
-            "Guns N' Roses",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-        )
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,12 +33,44 @@ class SearchActivity : AppCompatActivity() {
             insets
         }
 
+        val iTunesAPIService = ITunesAPIService()
         val btnBack = findViewById<MaterialToolbar>(R.id.back)
         val inputSearch = findViewById<EditText>(R.id.inputSearch)
         val btnClean = findViewById<ImageButton>(R.id.btnClean)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val emptyLayout = findViewById<LinearLayout>(R.id.empty_layout)
+        val errorLayout = findViewById<LinearLayout>(R.id.error_layout)
+        val btnUpdate = findViewById<Button>(R.id.btnUpdate)
 
-        recyclerView.adapter = TrackAdapter(tracks)
+        val conditionalViews = { props: iTunesResponse ->
+            when (props.status) {
+                Status.SUCCESS -> {
+                    emptyLayout.visibility = View.GONE
+                    errorLayout.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+                    recyclerView.adapter = TrackAdapter(props.tracks)
+                }
+
+                Status.EMPTY -> {
+                    emptyLayout.visibility = View.VISIBLE
+                    errorLayout.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
+                }
+
+                Status.ERROR -> {
+                    emptyLayout.visibility = View.GONE
+                    errorLayout.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                }
+            }
+        }
+
+        btnUpdate.setOnClickListener {
+            iTunesAPIService.getTracks(
+                searchText,
+                conditionalViews
+            )
+        }
 
         btnBack.setNavigationOnClickListener {
             finish()
@@ -82,6 +86,8 @@ class SearchActivity : AppCompatActivity() {
             if (view != null) {
                 hideKeyboard(view)
             }
+
+            conditionalViews(iTunesResponse(Status.EMPTY, listOf()))
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -100,6 +106,17 @@ class SearchActivity : AppCompatActivity() {
         }
 
         inputSearch.addTextChangedListener(simpleTextWatcher)
+
+        inputSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                iTunesAPIService.getTracks(
+                    searchText,
+                    conditionalViews
+                )
+                true
+            }
+            false
+        }
     }
 
     private fun btnCleanVisibility(s: CharSequence?): Int {

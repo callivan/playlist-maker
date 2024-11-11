@@ -6,7 +6,7 @@ data class iTunesAPITrack(
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,
-    val artworkUrl100: StringBuffer
+    val artworkUrl100: String
 )
 
 data class iTunesAPIResponse(val resultCount: Int, val results: List<iTunesAPITrack>)

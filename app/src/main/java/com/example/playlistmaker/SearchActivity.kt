@@ -44,6 +44,12 @@ class SearchActivity : AppCompatActivity() {
 
         val conditionalViews = { props: iTunesResponse ->
             when (props.status) {
+                Status.INITED -> {
+                    emptyLayout.visibility = View.GONE
+                    errorLayout.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
+                }
+
                 Status.SUCCESS -> {
                     emptyLayout.visibility = View.GONE
                     errorLayout.visibility = View.GONE
@@ -87,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
                 hideKeyboard(view)
             }
 
-            conditionalViews(iTunesResponse(Status.EMPTY, listOf()))
+            conditionalViews(iTunesResponse(Status.INITED, listOf()))
         }
 
         val simpleTextWatcher = object : TextWatcher {

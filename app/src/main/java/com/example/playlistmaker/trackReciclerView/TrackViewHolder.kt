@@ -17,12 +17,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackPreview: ImageView = itemView.findViewById(R.id.trackPreview)
 
     private val glide = Glide.with(itemView)
+    private val dateFormatter by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     fun bind(model: iTunesAPITrack) {
         trackName.text = model.trackName
         trackArtist.text = model.artistName
-        trackTime.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
+        trackTime.text = dateFormatter.format(model.trackTimeMillis)
         glide.load(model.artworkUrl100).centerCrop().placeholder(R.drawable.placeholder)
             .into(trackPreview)
     }

@@ -59,36 +59,39 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <LinearLayout
-            android:id="@+id/empty_layout"
+    <LinearLayout
+        android:id="@+id/empty_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="178dp"
+            android:layout_marginBottom="@dimen/indent_m"
+            android:scaleType="centerCrop"
+            android:src="@drawable/empty" />
+
+        <TextView
+            style="@style/TextError"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="178dp"
-                android:layout_marginBottom="@dimen/indent_m"
-                android:scaleType="centerCrop"
-                android:src="@drawable/empty" />
-
-            <TextView
-                style="@style/TextError"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/empty"
-                android:textAlignment="center" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="@string/empty"
+            android:textAlignment="center" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="120dp"

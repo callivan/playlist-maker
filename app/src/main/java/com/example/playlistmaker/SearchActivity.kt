@@ -16,9 +16,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.iTunesAPIService.ITunesAPIService
+import com.example.playlistmaker.iTunesAPIService.iTunesAPITrack
 import com.example.playlistmaker.iTunesAPIService.iTunesResponse
+import com.example.playlistmaker.searchHistory.SearchHistoryAdapter
+import com.example.playlistmaker.searchHistory.SearchHistoryService
 import com.example.playlistmaker.trackReciclerView.TrackAdapter
 import com.google.android.material.appbar.MaterialToolbar
+
+const val SEARCH_HISTORY_PREFERENCES = "search_history_preferences"
 
 class SearchActivity : AppCompatActivity() {
     private var searchText = ""
@@ -34,13 +39,36 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val iTunesAPIService = ITunesAPIService()
-        val btnBack = findViewById<MaterialToolbar>(R.id.back)
+
         val inputSearch = findViewById<EditText>(R.id.inputSearch)
+
+        val btnBack = findViewById<MaterialToolbar>(R.id.back)
         val btnClean = findViewById<ImageButton>(R.id.btnClean)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val btnUpdate = findViewById<Button>(R.id.btnUpdate)
+        val btnCleanSearchHistory = findViewById<Button>(R.id.btnCleanHistory)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewTracks)
+        val searchHistoryRecyclerView = findViewById<RecyclerView>(R.id.recyclerViewHistorySearch)
+
         val emptyLayout = findViewById<LinearLayout>(R.id.empty_layout)
         val errorLayout = findViewById<LinearLayout>(R.id.error_layout)
-        val btnUpdate = findViewById<Button>(R.id.btnUpdate)
+        val searchHistoryLayout = findViewById<LinearLayout>(R.id.searchHistory)
+
+        val sharedPrefs = getSharedPreferences(SEARCH_HISTORY_PREFERENCES, MODE_PRIVATE)
+
+        fun searchHistoryListUpdated() {
+            searchHistoryRecyclerView.adapter?.notifyDataSetChanged()
+        }
+
+        val searchHistory = SearchHistoryService(sharedPrefs, ::searchHistoryListUpdated)
+
+        val searchHistoryList = searchHistory.get()
+
+        searchHistoryRecyclerView.adapter = SearchHistoryAdapter(searchHistoryList)
+
+        fun addInSearchHistory(track: iTunesAPITrack) {
+            searchHistory.add(track)
+        }
 
         val conditionalViews = { props: iTunesResponse ->
             when (props.status) {
@@ -54,7 +82,8 @@ class SearchActivity : AppCompatActivity() {
                     emptyLayout.visibility = View.GONE
                     errorLayout.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
-                    recyclerView.adapter = TrackAdapter(props.tracks)
+                    recyclerView.adapter =
+                        TrackAdapter(props.tracks, ::addInSearchHistory)
                 }
 
                 Status.EMPTY -> {
@@ -96,6 +125,11 @@ class SearchActivity : AppCompatActivity() {
             conditionalViews(iTunesResponse(Status.INITED, listOf()))
         }
 
+        btnCleanSearchHistory.setOnClickListener {
+            searchHistory.clean()
+            searchHistoryLayout.visibility = View.GONE
+        }
+
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
@@ -103,7 +137,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 btnClean.visibility = btnCleanVisibility(s)
+
                 searchText = s.toString()
+
+                searchHistoryLayout.visibility =
+                    if (inputSearch.hasFocus() && searchHistoryList.isNotEmpty() && s?.isEmpty() == true
+                    ) View.VISIBLE else View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -122,6 +161,11 @@ class SearchActivity : AppCompatActivity() {
                 true
             }
             false
+        }
+
+        inputSearch.setOnFocusChangeListener { _, hasFocus ->
+            searchHistoryLayout.visibility =
+                if (hasFocus && searchHistoryList.isNotEmpty() && inputSearch.text.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 

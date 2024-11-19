@@ -19,7 +19,9 @@ class SearchHistoryService(
         val type = object : TypeToken<MutableList<iTunesAPITrack>>() {}.type
         val list = Gson().fromJson<MutableList<iTunesAPITrack>>(json, type)
 
-        searchHistoryList.addAll(list)
+        if (list != null && list.isNotEmpty()) {
+            searchHistoryList.addAll(list)
+        }
     }
 
     fun add(track: iTunesAPITrack) {

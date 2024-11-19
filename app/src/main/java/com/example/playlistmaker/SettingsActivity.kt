@@ -16,6 +16,13 @@ const val THEME_PREFERENCES = "theme_preferences"
 const val TYPE = "theme"
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var btnBack: MaterialToolbar
+    private lateinit var btnShare: Button
+    private lateinit var btnSupport: Button
+    private lateinit var btnAgreement: Button
+
+    private lateinit var themeSwitcher: Switch
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,12 +35,12 @@ class SettingsActivity : AppCompatActivity() {
 
         val sharedPrefs = getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE)
 
-        val btnBack = findViewById<MaterialToolbar>(R.id.back)
-        val btnShare = findViewById<Button>(R.id.btnShare)
-        val btnSupport = findViewById<Button>(R.id.btnSupport)
-        val btnAgreement = findViewById<Button>(R.id.btnAgreement)
+        btnBack = findViewById(R.id.back)
+        btnShare = findViewById(R.id.btnShare)
+        btnSupport = findViewById(R.id.btnSupport)
+        btnAgreement = findViewById(R.id.btnAgreement)
 
-        val themeSwitcher = findViewById<Switch>(R.id.themeSwitch)
+        themeSwitcher = findViewById<Switch>(R.id.themeSwitch)
 
         themeSwitcher.isChecked = sharedPrefs.getBoolean(TYPE, false)
 

@@ -8,7 +8,7 @@ import com.example.playlistmaker.iTunesAPIService.iTunesAPITrack
 
 class TrackAdapter(
     private val tracks: List<iTunesAPITrack>,
-    private val cb: (track: iTunesAPITrack) -> Unit
+    private val cb: (track: iTunesAPITrack, remember: Boolean) -> Unit
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -20,7 +20,7 @@ class TrackAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
 
         holder.itemView.setOnClickListener {
-            cb(tracks[position])
+            cb(tracks[position], true)
         }
 
         holder.bind(tracks[position])

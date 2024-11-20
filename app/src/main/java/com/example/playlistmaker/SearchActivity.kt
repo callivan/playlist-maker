@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -23,8 +24,11 @@ import com.example.playlistmaker.searchHistory.SearchHistoryAdapter
 import com.example.playlistmaker.searchHistory.SearchHistoryService
 import com.example.playlistmaker.trackReciclerView.TrackAdapter
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.gson.Gson
 
 const val SEARCH_HISTORY_PREFERENCES = "search_history_preferences"
+
+const val TRACK = "track"
 
 class SearchActivity : AppCompatActivity() {
     private var searchText = ""
@@ -71,15 +75,24 @@ class SearchActivity : AppCompatActivity() {
 
         val searchHistoryList = searchHistory.get()
 
-        searchHistoryRecyclerView.adapter = SearchHistoryAdapter(searchHistoryList)
-
         emptyLayout = findViewById(R.id.empty_layout)
         errorLayout = findViewById(R.id.error_layout)
         searchHistoryLayout = findViewById(R.id.searchHistory)
 
-        fun addInSearchHistory(track: iTunesAPITrack) {
-            searchHistory.add(track)
+        fun onClickTrack(track: iTunesAPITrack, remember: Boolean) {
+            val intent = Intent(this, TrackActivity::class.java)
+
+            intent.putExtra(TRACK, Gson().toJson(track))
+
+            startActivity(intent)
+
+            if (remember) {
+                searchHistory.add(track)
+            }
         }
+
+        searchHistoryRecyclerView.adapter = SearchHistoryAdapter(searchHistoryList, ::onClickTrack)
+
 
         fun conditionalViews(props: iTunesResponse) {
             when (props.status) {
@@ -94,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
                     errorLayout.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                     recyclerView.adapter =
-                        TrackAdapter(props.tracks, ::addInSearchHistory)
+                        TrackAdapter(props.tracks, ::onClickTrack)
                 }
 
                 Status.EMPTY -> {

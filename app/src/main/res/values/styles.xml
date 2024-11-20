@@ -127,4 +127,34 @@
         <item name="android:textColor">?attr/colorSecondaryVariant</item>
         <item name="android:textAlignment">center</item>
     </style>
+
+    <style name="TrackNameDetail">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_size_l</item>
+        <item name="android:lineHeight">@dimen/line_height_l</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TrackAuthorDetail">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_size_xm</item>
+        <item name="android:lineHeight">@dimen/line_height_xm</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TrackDetail">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text_size_xm</item>
+        <item name="android:lineHeight">@dimen/line_height_xm</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>

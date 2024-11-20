@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         app:navigationIcon="@drawable/arrow_left"
-        app:navigationIconTint="?attr/colorSecondaryVariant"
         app:title="@string/search" />
 
     <FrameLayout
@@ -25,7 +24,7 @@
         android:layout_height="36dp"
         android:layout_marginHorizontal="@dimen/indent_m"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/rounded_corners">
+        android:background="@drawable/rounded_corners_x">
 
         <ImageView
             style="@style/SearchIcon"

@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         app:navigationIcon="@drawable/arrow_left"
-        app:navigationIconTint="?attr/colorSecondaryVariant"
         app:title="@string/settings" />
 
     <Switch

@@ -15,6 +15,8 @@ class SearchHistoryService(
 ) {
 
     init {
+        searchHistoryList.clear()
+
         val json = sharedPrefs.getString(SEARCH_HISTORY, null)
         val type = object : TypeToken<MutableList<iTunesAPITrack>>() {}.type
         val list = Gson().fromJson<MutableList<iTunesAPITrack>>(json, type)

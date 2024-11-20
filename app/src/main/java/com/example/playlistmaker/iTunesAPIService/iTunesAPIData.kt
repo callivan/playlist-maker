@@ -3,6 +3,7 @@ package com.example.playlistmaker.iTunesAPIService
 import com.example.playlistmaker.Status
 
 data class iTunesAPITrack(
+    val trackId: String,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,

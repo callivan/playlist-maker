@@ -1,14 +1,14 @@
-package com.example.playlistmaker.trackReciclerView
+package com.example.playlistmaker.searchHistory
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.iTunesAPIService.iTunesAPITrack
+import com.example.playlistmaker.trackReciclerView.TrackViewHolder
 
-class TrackAdapter(
-    private val tracks: List<iTunesAPITrack>,
-    private val cb: (track: iTunesAPITrack) -> Unit
+class SearchHistoryAdapter(
+    private val tracks: List<iTunesAPITrack>
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -20,7 +20,7 @@ class TrackAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
 
         holder.itemView.setOnClickListener {
-            cb(tracks[position])
+            println(tracks[position])
         }
 
         holder.bind(tracks[position])

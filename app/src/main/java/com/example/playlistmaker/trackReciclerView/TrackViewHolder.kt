@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.iTunesAPIService.iTunesAPITrack
-import com.example.playlistmaker.utils.Date
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.playlistmaker.utils.Utils
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackName: TextView = itemView.findViewById(R.id.trackName)
@@ -22,7 +20,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(model: iTunesAPITrack) {
         trackName.text = model.trackName
         trackArtist.text = model.artistName
-        trackTime.text = Date().msToMinSec(model.trackTimeMillis)
+        trackTime.text = Utils.msToMinSec(model.trackTimeMillis)
         glide.load(model.artworkUrl100).centerCrop().placeholder(R.drawable.placeholder)
             .into(trackPreview)
     }

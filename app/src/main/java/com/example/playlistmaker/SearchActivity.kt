@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,6 +24,7 @@ import com.example.playlistmaker.iTunesAPIService.iTunesResponse
 import com.example.playlistmaker.searchHistory.SearchHistoryAdapter
 import com.example.playlistmaker.searchHistory.SearchHistoryService
 import com.example.playlistmaker.trackReciclerView.TrackAdapter
+import com.example.playlistmaker.utils.Utils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.gson.Gson
 
@@ -34,6 +36,8 @@ class SearchActivity : AppCompatActivity() {
     private var searchText = ""
 
     private lateinit var inputSearch: EditText
+
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var btnBack: MaterialToolbar
     private lateinit var btnClean: ImageButton
@@ -64,6 +68,8 @@ class SearchActivity : AppCompatActivity() {
         val searchHistory = SearchHistoryService(sharedPrefs, ::searchHistoryListUpdated)
 
         inputSearch = findViewById(R.id.inputSearch)
+
+        progressBar = findViewById(R.id.progressBar)
 
         btnBack = findViewById(R.id.back)
         btnClean = findViewById(R.id.btnClean)
@@ -110,6 +116,13 @@ class SearchActivity : AppCompatActivity() {
                         TrackAdapter(props.tracks, ::onClickTrack)
                 }
 
+                Status.PENDING -> {
+                    emptyLayout.visibility = View.GONE
+                    errorLayout.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
+
+                }
+
                 Status.EMPTY -> {
                     emptyLayout.visibility = View.VISIBLE
                     errorLayout.visibility = View.GONE
@@ -130,6 +143,8 @@ class SearchActivity : AppCompatActivity() {
                 ::conditionalViews
             )
         }
+
+        val debounceSearchTrack = Utils.debounceWithThread(::getTracks, 1000L)
 
         btnUpdate.setOnClickListener {
             getTracks()
@@ -172,9 +187,7 @@ class SearchActivity : AppCompatActivity() {
                     if (inputSearch.hasFocus() && searchHistoryList.isNotEmpty() && s?.isEmpty() == true
                     ) View.VISIBLE else View.GONE
 
-                if (s.toString().isEmpty()) {
-                    conditionalViews(iTunesResponse(Status.INITED, listOf()))
-                }
+                debounceSearchTrack()
             }
 
             override fun afterTextChanged(s: Editable?) {

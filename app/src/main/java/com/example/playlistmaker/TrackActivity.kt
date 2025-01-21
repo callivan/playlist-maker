@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.iTunesAPIService.iTunesAPITrack
-import com.example.playlistmaker.utils.Date
+import com.example.playlistmaker.utils.Utils
 import com.google.gson.Gson
 
 class TrackActivity : AppCompatActivity() {
@@ -28,9 +28,9 @@ class TrackActivity : AppCompatActivity() {
     private lateinit var trackGenre: TextView
     private lateinit var trackCountry: TextView
 
-    private val date = Date()
-
     private lateinit var group: Group
+
+    private val utils = Utils
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +64,7 @@ class TrackActivity : AppCompatActivity() {
 
         trackName.text = track.trackName
         trackAuthor.text = track.artistName
-        trackDuration.text = date.msToMinSec(track.trackTimeMillis)
+        trackDuration.text = utils.msToMinSec(track.trackTimeMillis)
 
         if (track.collectionName != null) {
             trackAlbum.text = track.collectionName
@@ -72,7 +72,7 @@ class TrackActivity : AppCompatActivity() {
             group.visibility = View.GONE
         }
 
-        trackYear.text = date.dateToYear(track.releaseDate)
+        trackYear.text = utils.dateToYear(track.releaseDate)
         trackGenre.text = track.primaryGenreName
         trackCountry.text = track.country
 

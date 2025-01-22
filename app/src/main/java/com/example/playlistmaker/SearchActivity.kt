@@ -187,7 +187,7 @@ class SearchActivity : AppCompatActivity() {
                     if (inputSearch.hasFocus() && searchHistoryList.isNotEmpty() && s?.isEmpty() == true
                     ) View.VISIBLE else View.GONE
 
-                debounceSearchTrack()
+                debounceSearchTrack.debounce()
             }
 
             override fun afterTextChanged(s: Editable?) {

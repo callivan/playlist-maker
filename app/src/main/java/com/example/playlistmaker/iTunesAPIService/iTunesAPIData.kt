@@ -4,6 +4,7 @@ import com.example.playlistmaker.Status
 import java.util.Date
 
 data class iTunesAPITrack(
+    val previewUrl: String,
     val trackId: String,
     val trackName: String,
     val artistName: String,

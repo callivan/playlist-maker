@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -22,14 +24,20 @@ import com.example.playlistmaker.iTunesAPIService.iTunesResponse
 import com.example.playlistmaker.searchHistory.SearchHistoryAdapter
 import com.example.playlistmaker.searchHistory.SearchHistoryService
 import com.example.playlistmaker.trackReciclerView.TrackAdapter
+import com.example.playlistmaker.utils.Utils
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.gson.Gson
 
 const val SEARCH_HISTORY_PREFERENCES = "search_history_preferences"
+
+const val TRACK = "track"
 
 class SearchActivity : AppCompatActivity() {
     private var searchText = ""
 
     private lateinit var inputSearch: EditText
+
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var btnBack: MaterialToolbar
     private lateinit var btnClean: ImageButton
@@ -61,6 +69,8 @@ class SearchActivity : AppCompatActivity() {
 
         inputSearch = findViewById(R.id.inputSearch)
 
+        progressBar = findViewById(R.id.progressBar)
+
         btnBack = findViewById(R.id.back)
         btnClean = findViewById(R.id.btnClean)
         btnUpdate = findViewById(R.id.btnUpdate)
@@ -71,15 +81,24 @@ class SearchActivity : AppCompatActivity() {
 
         val searchHistoryList = searchHistory.get()
 
-        searchHistoryRecyclerView.adapter = SearchHistoryAdapter(searchHistoryList)
-
         emptyLayout = findViewById(R.id.empty_layout)
         errorLayout = findViewById(R.id.error_layout)
         searchHistoryLayout = findViewById(R.id.searchHistory)
 
-        fun addInSearchHistory(track: iTunesAPITrack) {
-            searchHistory.add(track)
+        fun onClickTrack(track: iTunesAPITrack, remember: Boolean) {
+            val intent = Intent(this, TrackActivity::class.java)
+
+            intent.putExtra(TRACK, Gson().toJson(track))
+
+            startActivity(intent)
+
+            if (remember) {
+                searchHistory.add(track)
+            }
         }
+
+        searchHistoryRecyclerView.adapter = SearchHistoryAdapter(searchHistoryList, ::onClickTrack)
+
 
         fun conditionalViews(props: iTunesResponse) {
             when (props.status) {
@@ -94,7 +113,14 @@ class SearchActivity : AppCompatActivity() {
                     errorLayout.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                     recyclerView.adapter =
-                        TrackAdapter(props.tracks, ::addInSearchHistory)
+                        TrackAdapter(props.tracks, ::onClickTrack)
+                }
+
+                Status.PENDING -> {
+                    emptyLayout.visibility = View.GONE
+                    errorLayout.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
+
                 }
 
                 Status.EMPTY -> {
@@ -117,6 +143,8 @@ class SearchActivity : AppCompatActivity() {
                 ::conditionalViews
             )
         }
+
+        val debounceSearchTrack = Utils.debounceWithThread(::getTracks, 1000L)
 
         btnUpdate.setOnClickListener {
             getTracks()
@@ -159,9 +187,7 @@ class SearchActivity : AppCompatActivity() {
                     if (inputSearch.hasFocus() && searchHistoryList.isNotEmpty() && s?.isEmpty() == true
                     ) View.VISIBLE else View.GONE
 
-                if (s.toString().isEmpty()) {
-                    conditionalViews(iTunesResponse(Status.INITED, listOf()))
-                }
+                debounceSearchTrack.debounce()
             }
 
             override fun afterTextChanged(s: Editable?) {

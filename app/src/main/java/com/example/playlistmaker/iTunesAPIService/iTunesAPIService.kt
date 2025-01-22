@@ -17,29 +17,38 @@ class ITunesAPIService {
     private val iTunesAPIService = retrofit.create<iTunesAPI>()
 
     fun getTracks(text: String, cb: (props: iTunesResponse) -> Unit) {
-        iTunesAPIService.getTracks(text).enqueue(object : Callback<iTunesAPIResponse> {
-            override fun onResponse(
-                call: Call<iTunesAPIResponse>, response: Response<iTunesAPIResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val tracks = response.body()?.results.orEmpty()
 
-                    cb(
-                        iTunesResponse(
-                            if (tracks.isEmpty()) Status.EMPTY else Status.SUCCESS,
-                            tracks
+        if (text.isEmpty()) {
+            cb(iTunesResponse(Status.INITED, listOf()))
+        } else {
+            iTunesAPIService.getTracks(text).enqueue(object : Callback<iTunesAPIResponse> {
+                override fun onResponse(
+                    call: Call<iTunesAPIResponse>, response: Response<iTunesAPIResponse>
+                ) {
+
+                    cb(iTunesResponse(Status.PENDING, listOf()))
+
+                    if (text.isNotEmpty() && response.isSuccessful) {
+                        val tracks = response.body()?.results.orEmpty()
+
+                        cb(
+                            iTunesResponse(
+                                if (tracks.isEmpty()) Status.EMPTY else Status.SUCCESS,
+                                tracks
+                            )
                         )
-                    )
-                } else {
+
+                    } else {
+                        cb(iTunesResponse(Status.ERROR, listOf()))
+                    }
+                }
+
+                override fun onFailure(call: Call<iTunesAPIResponse>, t: Throwable) {
+                    t.printStackTrace()
                     cb(iTunesResponse(Status.ERROR, listOf()))
                 }
-            }
-
-            override fun onFailure(call: Call<iTunesAPIResponse>, t: Throwable) {
-                t.printStackTrace()
-                cb(iTunesResponse(Status.ERROR, listOf()))
-            }
-        })
+            })
+        }
     }
 
     fun clean() {

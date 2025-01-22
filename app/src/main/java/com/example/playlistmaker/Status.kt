@@ -1,5 +1,5 @@
 package com.example.playlistmaker
 
 enum class Status {
-    INITED, SUCCESS, EMPTY, ERROR
+    INITED, PENDING, SUCCESS, EMPTY, ERROR
 }

@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.activitys
 
 import android.os.Bundle
 import android.view.View
@@ -11,8 +11,9 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.example.playlistmaker.iTunesAPIService.iTunesAPITrack
-import com.example.playlistmaker.player.Player
+import com.example.playlistmaker.R
+import com.example.playlistmaker.presentation.components.Player
+import com.example.playlistmaker.presentation.models.TrackUI
 import com.example.playlistmaker.utils.Utils
 import com.google.gson.Gson
 
@@ -69,7 +70,7 @@ class TrackActivity : AppCompatActivity() {
             insets
         }
 
-        val track = Gson().fromJson(intent.getStringExtra(TRACK), iTunesAPITrack::class.java)
+        val track = Gson().fromJson(intent.getStringExtra(TRACK), TrackUI::class.java)
 
         btnBack = findViewById(R.id.btnBack)
         btnPlay = findViewById(R.id.btnPlay)

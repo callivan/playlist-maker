@@ -1,9 +1,8 @@
-package com.example.playlistmaker.iTunesAPIService
+package com.example.playlistmaker.presentation.models
 
-import com.example.playlistmaker.Status
 import java.util.Date
 
-data class iTunesAPITrack(
+data class TrackUI(
     val previewUrl: String,
     val trackId: String,
     val trackName: String,
@@ -15,7 +14,3 @@ data class iTunesAPITrack(
     val primaryGenreName: String,
     val country: String
 )
-
-data class iTunesAPIResponse(val resultCount: Int, val results: List<iTunesAPITrack>)
-
-data class iTunesResponse(val status: Status, val tracks: List<iTunesAPITrack>)

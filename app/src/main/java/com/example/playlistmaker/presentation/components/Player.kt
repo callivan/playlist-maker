@@ -1,28 +1,33 @@
-package com.example.playlistmaker.player
+package com.example.playlistmaker.presentation.components
 
 import android.media.MediaPlayer
+import com.example.playlistmaker.presentation.models.PlayerState
 import com.example.playlistmaker.utils.Utils
 
 class Player {
     private val player = MediaPlayer()
-    private var playerStatus = Status.DEFAULT
-    private lateinit var removeDebounce: () -> Unit
+    private var playerStatus = PlayerState.DEFAULT
+    private var removeDebounce: (() -> Unit)? = null
 
     fun startPlayer() {
         player.start()
-        playerStatus = Status.PLAYING
+        playerStatus = PlayerState.PLAYING
     }
 
     fun pausePlayer() {
-        player.pause()
-        playerStatus = Status.PAUSED
-        removeDebounce()
+        if (removeDebounce != null) {
+            player.pause()
+            playerStatus = PlayerState.PAUSED
+            removeDebounce?.invoke()
+        }
     }
 
     fun releasePlayer() {
-        player.release()
-        playerStatus = Status.DEFAULT
-        removeDebounce()
+        if (removeDebounce != null) {
+            player.release()
+            playerStatus = PlayerState.DEFAULT
+            removeDebounce?.invoke()
+        }
     }
 
     fun preparePlayer(url: String, onPrepared: () -> Unit, onComplete: () -> Unit) {
@@ -31,20 +36,20 @@ class Player {
 
         player.setOnPreparedListener {
             onPrepared()
-            playerStatus = Status.PREPARED
+            playerStatus = PlayerState.PREPARED
         }
 
         player.setOnCompletionListener {
             onComplete()
-            removeDebounce()
+            removeDebounce?.invoke()
         }
     }
 
     fun playbackControl(onStart: () -> Unit = {}, onPause: () -> Unit = {}) {
-        if (playerStatus == Status.PLAYING) {
+        if (playerStatus == PlayerState.PLAYING) {
             pausePlayer()
             onPause()
-        } else if (playerStatus == Status.PREPARED || playerStatus == Status.PAUSED) {
+        } else if (playerStatus == PlayerState.PREPARED || playerStatus == PlayerState.PAUSED) {
             startPlayer()
             onStart()
         }

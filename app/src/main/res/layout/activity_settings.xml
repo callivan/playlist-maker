@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
     android:orientation="vertical"
-    tools:context=".ui.activitys.SettingsActivity">
+    tools:context=".settings.ui.activities.SettingsActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back"

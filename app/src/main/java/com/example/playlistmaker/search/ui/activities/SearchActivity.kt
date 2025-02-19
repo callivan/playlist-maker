@@ -4,26 +4,27 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.consts.Const
 import com.example.playlistmaker.player.ui.activities.TrackActivity
 import com.example.playlistmaker.search.ui.adapters.SearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapters.TracksAdapter
-import com.example.playlistmaker.search.ui.models.SearchScreenState
+import com.example.playlistmaker.search.ui.models.TracksSearchScreenState
 import com.example.playlistmaker.search.ui.models.TrackUI
 import com.example.playlistmaker.search.ui.viewModels.SearchViewModel
 import com.google.gson.Gson
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<SearchViewModel> {
-        SearchViewModel.getViewModelFactory(this)
+        SearchViewModel.getViewModelFactory()
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -43,66 +44,57 @@ class SearchActivity : ComponentActivity() {
         setContentView(binding.root)
 
         viewModel.getInputTextLiveData().observe(this) { text ->
-            binding.btnClean.visibility = btnCleanVisibility(text)
+            binding.btnClean.isVisible = text.isNotEmpty()
 
             if (binding.inputSearch.text.toString() != text) {
                 binding.inputSearch.setText(text)
             }
-
-            if (text.isEmpty()) {
-                viewModel.resetSearchScreenStateLiveData()
-            }
         }
 
-        viewModel.getSearchScreenStateLiveData().observe(this) { state ->
+        viewModel.getTracksSearchScreenStateLiveData().observe(this) { state ->
             runOnUiThread {
                 when (state) {
-                    is SearchScreenState.Init -> {
-                        println("INIT")
-                        binding.emptyLayout.visibility = View.GONE
-                        binding.errorLayout.visibility = View.GONE
-                        binding.recyclerViewTracks.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        binding.searchHistory.visibility = View.GONE
+                    is TracksSearchScreenState.Init -> {
+                        binding.emptyLayout.isVisible = false
+                        binding.errorLayout.isVisible = false
+                        binding.recyclerViewTracks.isVisible = false
+                        binding.progressBar.isVisible = false
+                        binding.searchHistory.isVisible = false
                     }
 
-                    is SearchScreenState.Pending -> {
-                        println("PENDING")
-                        binding.emptyLayout.visibility = View.GONE
-                        binding.errorLayout.visibility = View.GONE
-                        binding.recyclerViewTracks.visibility = View.GONE
-                        binding.progressBar.visibility = View.VISIBLE
-                        binding.searchHistory.visibility = View.GONE
+                    is TracksSearchScreenState.Pending -> {
+                        binding.emptyLayout.isVisible = false
+                        binding.errorLayout.isVisible = false
+                        binding.recyclerViewTracks.isVisible = false
+                        binding.progressBar.isVisible = true
+                        binding.searchHistory.isVisible = false
                     }
 
-                    is SearchScreenState.Content -> {
-                        println("CONTENT")
-                        binding.emptyLayout.visibility = View.GONE
-                        binding.errorLayout.visibility = View.GONE
-                        binding.recyclerViewTracks.visibility = View.VISIBLE
-                        binding.progressBar.visibility = View.GONE
-                        binding.searchHistory.visibility = View.GONE
+                    is TracksSearchScreenState.Content -> {
+                        binding.emptyLayout.isVisible = false
+                        binding.errorLayout.isVisible = false
+                        binding.recyclerViewTracks.isVisible = true
+                        binding.progressBar.isVisible = false
+                        binding.searchHistory.isVisible = false
 
                         binding.recyclerViewTracks.adapter =
                             TracksAdapter(state.tracks, onClick = ::onClickTrack)
                     }
 
-                    is SearchScreenState.Empty -> {
-                        println("EMPTY")
-                        binding.emptyLayout.visibility = View.VISIBLE
-                        binding.errorLayout.visibility = View.GONE
-                        binding.recyclerViewTracks.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        binding.searchHistory.visibility = View.GONE
+                    is TracksSearchScreenState.Empty -> {
+                        binding.emptyLayout.isVisible = true
+                        binding.errorLayout.isVisible = false
+                        binding.recyclerViewTracks.isVisible = false
+                        binding.progressBar.isVisible = false
+                        binding.searchHistory.isVisible = false
                     }
 
-                    is SearchScreenState.Error -> {
-                        println("ERROR")
-                        binding.emptyLayout.visibility = View.GONE
-                        binding.errorLayout.visibility = View.VISIBLE
-                        binding.recyclerViewTracks.visibility = View.GONE
-                        binding.progressBar.visibility = View.GONE
-                        binding.searchHistory.visibility = View.GONE
+                    is TracksSearchScreenState.Error -> {
+                        binding.emptyLayout.isVisible = false
+                        binding.errorLayout.isVisible = true
+                        binding.recyclerViewTracks.isVisible = false
+                        binding.progressBar.isVisible = false
+                        binding.searchHistory.isVisible = false
                     }
                 }
             }
@@ -112,29 +104,20 @@ class SearchActivity : ComponentActivity() {
             viewModel.getTracks()
         }
 
-        binding.back.setNavigationOnClickListener {
-            finish()
-        }
-
         binding.btnClean.setOnClickListener {
-            viewModel.cleanInputTextLiveData()
-
             val view: View? = this.currentFocus
 
             if (view != null) {
                 hideKeyboard(view)
             }
 
-            viewModel.resetSearchScreenStateLiveData()
-            viewModel.resetInputTextLiveData()
+            viewModel.cleanInputTextLiveData()
         }
 
         binding.btnCleanHistory.setOnClickListener {
-            viewModel.cleanSearchHistory()
+            viewModel.cleanTracksHistory()
 
             onChangedHistory()
-
-            viewModel.resetSearchScreenStateLiveData()
         }
 
         binding.inputSearch.addTextChangedListener(viewModel.textWatcher())
@@ -146,20 +129,17 @@ class SearchActivity : ComponentActivity() {
         binding.inputSearch.setOnClickListener {
             searchHistoryVisibility(true)
         }
-    }
 
-    private fun btnCleanVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
+        binding.back.setNavigationOnClickListener {
+            finish()
         }
     }
 
     private fun searchHistoryVisibility(hasFocus: Boolean) {
-        binding.searchHistory.visibility = if (hasFocus && viewModel.getSearchHistory()
-                .isNotEmpty() && binding.inputSearch.text.isEmpty()
-        ) View.VISIBLE else View.GONE
+        binding.searchHistory.isVisible =
+            binding.inputSearch.text.isEmpty() && hasFocus && viewModel.getTracksHistory()
+                .isNotEmpty()
+
 
         onInitHistory()
     }
@@ -176,7 +156,7 @@ class SearchActivity : ComponentActivity() {
 
     private fun onInitHistory() {
         binding.recyclerViewHistorySearch.adapter =
-            SearchHistoryAdapter(viewModel.getSearchHistory(), onClick = ::onClickTrack)
+            SearchHistoryAdapter(viewModel.getTracksHistory(), onClick = ::onClickTrack)
     }
 
     private fun onClickTrack(track: TrackUI, remember: Boolean) {
@@ -187,7 +167,7 @@ class SearchActivity : ComponentActivity() {
         startActivity(intent)
 
         if (remember) {
-            viewModel.addInSearchHistory(track)
+            viewModel.addTrackInHistory(track)
             onChangedHistory()
         }
     }

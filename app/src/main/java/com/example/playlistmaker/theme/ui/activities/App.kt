@@ -1,16 +1,15 @@
 package com.example.playlistmaker.theme.ui.activities
 
 import android.app.Application
-import com.example.playlistmaker.consts.Const
-import com.example.playlistmaker.settings.domain.useCases.SwitchThemeUseCase
+import com.example.playlistmaker.creator.ThemeCreator
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPrefs = getSharedPreferences(Const.THEME_PREFS, MODE_PRIVATE)
+        val interactor = ThemeCreator.provideThemeInteractor(this)
 
-        SwitchThemeUseCase().switchTheme(sharedPrefs.getBoolean(Const.THEME, false))
+        interactor.switch(interactor.get())
     }
 }

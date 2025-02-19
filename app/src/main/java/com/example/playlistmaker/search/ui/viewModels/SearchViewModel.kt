@@ -1,75 +1,72 @@
 package com.example.playlistmaker.search.ui.viewModels
 
+import android.app.Application
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.app.AppCompatActivity.MODE_PRIVATE
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.SearchTracksCreator
-import com.example.playlistmaker.consts.Const
-import com.example.playlistmaker.search.data.sharedPrefs.TracksHistorySharedPrefs
+import com.example.playlistmaker.creator.TracksHistoryCreator
+import com.example.playlistmaker.creator.TracksSearchCreator
+import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.domain.models.TracksHistoryIntercator
 import com.example.playlistmaker.search.domain.models.TracksInteractor
-import com.example.playlistmaker.search.ui.activities.SearchActivity
-import com.example.playlistmaker.search.ui.models.SearchScreenState
 import com.example.playlistmaker.search.ui.models.TrackUI
+import com.example.playlistmaker.search.ui.models.TracksSearchScreenState
 import com.example.playlistmaker.utils.Utils
 
 class SearchViewModel(
-    activity: SearchActivity,
-    private val tracksInteractor: TracksInteractor,
+    private val tracksSearchInteractor: TracksInteractor,
+    private val tracksHistoryInteractor: TracksHistoryIntercator
 ) : ViewModel() {
 
-    private val sharedPrefs =
-        activity.getSharedPreferences(Const.SEARCH_HISTORY_PREFS, MODE_PRIVATE)
+    private val inputTextLiveData = MutableLiveData<String>("")
 
-    private var searchHistory = TracksHistorySharedPrefs(sharedPrefs)
+    private val tracksSearchScreenStateLiveData =
+        MutableLiveData<TracksSearchScreenState>(TracksSearchScreenState.Init)
 
-    private val searchScreenStateLiveData =
-        MutableLiveData<SearchScreenState>(SearchScreenState.Init)
-    private val inputTextLivData = MutableLiveData<String>("")
+    fun getInputTextLiveData(): LiveData<String> = inputTextLiveData
+
+    fun getTracksSearchScreenStateLiveData(): LiveData<TracksSearchScreenState> =
+        tracksSearchScreenStateLiveData
 
     private val debouncer =
         Utils.debounceWithThread({ getTracks(getInputTextLiveData().value) }, 1000L)
 
-    fun resetSearchScreenStateLiveData(): Unit =
-        searchScreenStateLiveData.postValue(SearchScreenState.Init)
-
-    fun resetInputTextLiveData(): Unit = inputTextLivData.postValue("")
-
-
-    fun getSearchScreenStateLiveData(): LiveData<SearchScreenState> = searchScreenStateLiveData
-    fun getInputTextLiveData(): LiveData<String> = inputTextLivData
-
     fun getTracks(text: String? = null) {
-        tracksInteractor.getTracks(text = (text ?: getInputTextLiveData()).toString(), onPending = {
-            searchScreenStateLiveData.postValue(SearchScreenState.Pending)
-        }, onSuccess = { tracks ->
+        tracksSearchInteractor.getTracks(
+            text = (text ?: getInputTextLiveData()).toString(),
+            onPending = {
+                tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Pending)
+            },
+            onSuccess = { tracks ->
 
-            if (tracks.isNotEmpty()) {
-                searchScreenStateLiveData.postValue(SearchScreenState.Content(tracks.map {
-                    TrackUI(
-                        country = it.country,
-                        trackId = it.trackId,
-                        trackName = it.trackName,
-                        previewUrl = it.previewUrl,
-                        artistName = it.artistName,
-                        releaseDate = it.releaseDate,
-                        artworkUrl100 = it.artworkUrl100,
-                        collectionName = it.collectionName,
-                        trackTimeMillis = it.trackTimeMillis,
-                        primaryGenreName = it.primaryGenreName,
-                    )
-                }))
-            } else {
-                searchScreenStateLiveData.postValue(SearchScreenState.Empty)
-            }
-        }, onError = {
-            searchScreenStateLiveData.postValue(SearchScreenState.Error)
-        })
+                if (tracks.isNotEmpty()) {
+                    tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Content(tracks.map {
+                        TrackUI(
+                            country = it.country,
+                            trackId = it.trackId,
+                            trackName = it.trackName,
+                            previewUrl = it.previewUrl,
+                            artistName = it.artistName,
+                            releaseDate = it.releaseDate,
+                            artworkUrl100 = it.artworkUrl100,
+                            collectionName = it.collectionName,
+                            trackTimeMillis = it.trackTimeMillis,
+                            primaryGenreName = it.primaryGenreName,
+                        )
+                    }))
+                } else {
+                    tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Empty)
+                }
+            },
+            onError = {
+                tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Error)
+            })
     }
 
     fun textWatcher(): TextWatcher {
@@ -79,10 +76,11 @@ class SearchViewModel(
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                inputTextLivData.postValue(s.toString())
+                inputTextLiveData.postValue(s.toString())
 
                 if (s.toString().isEmpty()) {
                     debouncer.remove()
+                    tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Init)
                 } else {
                     debouncer.debounce()
                 }
@@ -94,28 +92,60 @@ class SearchViewModel(
         }
     }
 
-    fun getSearchHistory(): List<TrackUI> {
-        return searchHistory.get()
+    fun cleanInputTextLiveData() {
+        inputTextLiveData.postValue("")
     }
 
-    fun addInSearchHistory(track: TrackUI) {
-        searchHistory.add(track)
+    fun getTracksHistory(): List<TrackUI> {
+        return tracksHistoryInteractor.get().map {
+            TrackUI(
+                country = it.country,
+                trackId = it.trackId,
+                trackName = it.trackName,
+                previewUrl = it.previewUrl,
+                artistName = it.artistName,
+                releaseDate = it.releaseDate,
+                artworkUrl100 = it.artworkUrl100,
+                collectionName = it.collectionName,
+                trackTimeMillis = it.trackTimeMillis,
+                primaryGenreName = it.primaryGenreName,
+            )
+        }
     }
 
-    fun cleanSearchHistory() {
-        searchHistory.clean()
+    fun addTrackInHistory(track: TrackUI) {
+        tracksHistoryInteractor.add(
+            Track(
+                country = track.country,
+                trackId = track.trackId,
+                trackName = track.trackName,
+                previewUrl = track.previewUrl,
+                artistName = track.artistName,
+                releaseDate = track.releaseDate,
+                artworkUrl100 = track.artworkUrl100,
+                collectionName = track.collectionName,
+                trackTimeMillis = track.trackTimeMillis,
+                primaryGenreName = track.primaryGenreName,
+            )
+        )
     }
 
-    fun cleanInputTextLiveData() = inputTextLivData.postValue("")
+    fun cleanTracksHistory() {
+        tracksHistoryInteractor.clean()
+        tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Init)
+    }
 
     companion object {
-        fun getViewModelFactory(
-            activity: SearchActivity,
-        ): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
+
+                val context = this[APPLICATION_KEY] as Application
+
                 SearchViewModel(
-                    activity = activity,
-                    tracksInteractor = SearchTracksCreator.provideTracksInteractor(),
+                    tracksSearchInteractor = TracksSearchCreator.provideTracksInteractor(),
+                    tracksHistoryInteractor = TracksHistoryCreator.provideTracksHistoryInteractor(
+                        context
+                    )
                 )
             }
         }

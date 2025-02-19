@@ -1,18 +1,20 @@
 package com.example.playlistmaker.settings.ui.activities
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.settings.ui.viewModels.SettingsViewModel
 
-class SettingsActivity : ComponentActivity() {
+class SettingsActivity : AppCompatActivity() {
     private val viewModel by viewModels<SettingsViewModel> {
-        SettingsViewModel.getViewModelFactory(this)
+        SettingsViewModel.getViewModelFactory()
     }
 
     private lateinit var binding: ActivitySettingsBinding
@@ -31,7 +33,9 @@ class SettingsActivity : ComponentActivity() {
 
         setContentView(binding.root)
 
-        binding.themeSwitch.isChecked = viewModel.isDarkTheme()
+        viewModel.getThemeLiveData().observe(this) { isDarkTheme ->
+            binding.themeSwitch.isChecked = isDarkTheme
+        }
 
         binding.themeSwitch.setOnCheckedChangeListener { _, checked -> viewModel.switchTheme(checked) }
 
@@ -41,19 +45,41 @@ class SettingsActivity : ComponentActivity() {
         }
 
         binding.btnShare.setOnClickListener {
-            viewModel.shareLink(getString(R.string.share_link))
-        }
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plane"
+            intent.putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.share_link)
+            )
 
-        binding.btnSupport.setOnClickListener {
-            viewModel.sendEmail(
-                mail = getString(R.string.mail),
-                title = getString(R.string.mail_subject),
-                text = getString(R.string.mail_text)
+            startActivity(
+                Intent.createChooser(
+                    intent,
+                    "Share link"
+                )
             )
         }
 
+        binding.btnSupport.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:")
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail)))
+            intent.putExtra(
+                Intent.EXTRA_SUBJECT,
+                getString(R.string.mail_subject)
+            )
+            intent.putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.mail_text)
+            )
+
+            startActivity(intent)
+        }
+
         binding.btnAgreement.setOnClickListener {
-            viewModel.linTo(getString(R.string.agreement_link))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.agreement_link)))
+
+            startActivity(intent)
         }
     }
 }

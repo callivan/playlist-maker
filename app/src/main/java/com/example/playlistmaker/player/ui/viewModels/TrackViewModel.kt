@@ -1,84 +1,84 @@
 package com.example.playlistmaker.player.ui.viewModels
 
+import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.player.domain.models.PlayerState
-import com.example.playlistmaker.player.domain.Player
-import com.example.playlistmaker.player.domain.models.PlayerScreenState
-import com.example.playlistmaker.player.domain.useCases.GetTrackUseCases
-import com.example.playlistmaker.player.ui.activities.TrackActivity
-import com.example.playlistmaker.player.ui.models.TrackUI
+import com.example.playlistmaker.player.ui.models.PlayerScreenState
+import com.example.playlistmaker.utils.Utils
 
-class TrackViewModel(
-    activity: TrackActivity,
-    private val trackUseCase: GetTrackUseCases,
-    private val player: Player,
-) : ViewModel() {
-    private val trackLiveData = MutableLiveData<TrackUI>()
+class TrackViewModel() : ViewModel() {
+    private val player = MediaPlayer()
+
+    private var removeDebounce: (() -> Unit)? = null
+
+    private fun setProgress() {
+        val debouncePlayerProgressWithThread = Utils.debounceWithThread({
+            playerScreenStateLiveData.postValue(PlayerScreenState.Playing(progress = player.currentPosition))
+            setProgress()
+        }, 300L)
+
+        debouncePlayerProgressWithThread.debounce()
+
+        removeDebounce = debouncePlayerProgressWithThread.remove
+    }
+
+    private val playerScreenStateLiveData =
+        MutableLiveData<PlayerScreenState>(PlayerScreenState.Pending)
 
     fun getPlayerScreenStateLiveData(): LiveData<PlayerScreenState> =
-        player.getPlayerScreenStateLiveData()
+        playerScreenStateLiveData
 
-    fun getPlayerProgressLiveData(): LiveData<PlayerState> = player.getPlayerProgressLiveData()
-    fun getTrackLiveData(): LiveData<TrackUI> = trackLiveData
-
-    init {
-        val track = trackUseCase.getTrackFromIntent(activity)
-
-        player.prepare(track.previewUrl)
-
-        trackLiveData.postValue(
-            TrackUI(
-                country = track.country,
-                trackId = track.trackId,
-                trackName = track.trackName,
-                previewUrl = track.previewUrl,
-                artistName = track.artistName,
-                releaseDate = track.releaseDate,
-                artworkUrl100 = track.artworkUrl100,
-                collectionName = track.collectionName,
-                trackTimeMillis = track.trackTimeMillis,
-                primaryGenreName = track.primaryGenreName,
-            )
-        )
+    fun play() {
+        player.start()
+        setProgress()
     }
 
     fun pause() {
         player.pause()
+        removeDebounce?.invoke()
+        playerScreenStateLiveData.postValue(PlayerScreenState.Paused)
     }
 
     fun release() {
         player.release()
+        removeDebounce?.invoke()
+        playerScreenStateLiveData.postValue(PlayerScreenState.Released)
     }
 
-    fun playerController(onPlay: () -> Unit, onPause: () -> Unit) {
-        if (getPlayerProgressLiveData().value!!.isPlaying) {
-            player.pause()
-            onPause()
+    fun playbackController() {
+        if (getPlayerScreenStateLiveData().value is PlayerScreenState.Playing) {
+            pause()
         } else {
-            player.play()
-            onPlay()
+            play()
+        }
+    }
+
+    fun prepare(url: String) {
+        player.setDataSource(url)
+        player.prepareAsync()
+
+        player.setOnPreparedListener {
+            playerScreenStateLiveData.postValue(PlayerScreenState.Prepared)
+        }
+
+        player.setOnCompletionListener {
+            playerScreenStateLiveData.postValue(PlayerScreenState.Completed)
+            removeDebounce?.invoke()
         }
     }
 
     override fun onCleared() {
-        player.release()
+        release()
     }
 
     companion object {
-        fun getViewModelFactory(
-            activity: TrackActivity,
-        ): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                TrackViewModel(
-                    activity = activity,
-                    player = Player(),
-                    trackUseCase = GetTrackUseCases(),
-                )
+                TrackViewModel()
             }
         }
     }

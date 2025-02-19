@@ -1,16 +1,21 @@
 package com.example.playlistmaker.search.data.sharedPrefs
 
+import android.app.Application
+import android.content.Context.MODE_PRIVATE
 import com.example.playlistmaker.consts.Const
-import com.example.playlistmaker.search.data.SharedPrefs
-import com.example.playlistmaker.search.ui.models.TrackUI
+import com.example.playlistmaker.search.data.History
+import com.example.playlistmaker.search.data.dto.TrackDto
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-private val history: MutableList<TrackUI> = mutableListOf()
+private val history: MutableList<TrackDto> = mutableListOf()
 
-class TracksHistorySharedPrefs(
-    private val sharedPrefs: android.content.SharedPreferences,
-) : SharedPrefs<List<TrackUI>, TrackUI> {
+class TracksHistory(
+    private val context: Application
+) : History {
+
+    private val sharedPrefs = context.getSharedPreferences(Const.SEARCH_HISTORY_PREFS, MODE_PRIVATE)
+
     init {
         history.clear()
 
@@ -18,15 +23,15 @@ class TracksHistorySharedPrefs(
             Const.SEARCH_HISTORY,
             null
         )
-        val type = object : TypeToken<MutableList<TrackUI>>() {}.type
-        val list = Gson().fromJson<MutableList<TrackUI>>(json, type)
+        val type = object : TypeToken<MutableList<TrackDto>>() {}.type
+        val list = Gson().fromJson<MutableList<TrackDto>>(json, type)
 
         if (list != null && list.isNotEmpty()) {
             history.addAll(list)
         }
     }
 
-    override fun add(track: TrackUI) {
+    override fun add(track: TrackDto) {
         var index = -1
         var isContains = false
 
@@ -53,7 +58,7 @@ class TracksHistorySharedPrefs(
             .putString(Const.SEARCH_HISTORY, json).apply()
     }
 
-    override fun get(): List<TrackUI> {
+    override fun get(): List<TrackDto> {
         return history
     }
 

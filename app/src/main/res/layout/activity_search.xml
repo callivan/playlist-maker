@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".search.ui.activities.SearchActivity">
 
@@ -66,9 +67,9 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="148dp"
         android:indeterminateTint="@color/blue"
-        android:visibility="gone"
-        android:layout_marginTop="148dp"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/searchHistory"
@@ -89,8 +90,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewHistorySearch"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

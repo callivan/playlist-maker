@@ -6,7 +6,7 @@ import com.example.playlistmaker.search.domain.api.TracksRepository
 import com.example.playlistmaker.search.domain.impl.TracksInteractorImpl
 import com.example.playlistmaker.search.domain.models.TracksInteractor
 
-object SearchTracksCreator {
+object TracksSearchCreator {
         private fun getRepository(): TracksRepository {
             return TracksRepositoryImpl(RetrofitNetworkClient())
         }

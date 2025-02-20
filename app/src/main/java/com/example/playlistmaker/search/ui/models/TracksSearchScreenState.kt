@@ -6,6 +6,8 @@ sealed class TracksSearchScreenState {
     data class Content(
         val tracks: List<TrackUI>,
     ) : TracksSearchScreenState()
+
     object Empty : TracksSearchScreenState()
     object Error : TracksSearchScreenState()
+    data class History(val tracks: List<TrackUI>) : TracksSearchScreenState()
 }

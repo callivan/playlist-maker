@@ -96,6 +96,18 @@ class SearchActivity : AppCompatActivity() {
                         binding.progressBar.isVisible = false
                         binding.searchHistory.isVisible = false
                     }
+
+                    is TracksSearchScreenState.History -> {
+                        binding.recyclerViewHistorySearch.adapter =
+                            SearchHistoryAdapter(
+                                state.tracks,
+                                onClick = ::onClickTrack
+                            )
+
+                        historyVisibility(binding.inputSearch.hasFocus(), state.tracks.isNotEmpty())
+
+                        onChangedHistory()
+                    }
                 }
             }
         }
@@ -123,25 +135,16 @@ class SearchActivity : AppCompatActivity() {
         binding.inputSearch.addTextChangedListener(viewModel.textWatcher())
 
         binding.inputSearch.setOnFocusChangeListener { _, hasFocus ->
-            searchHistoryVisibility(hasFocus)
+            viewModel.getTracksHistory()
         }
 
         binding.inputSearch.setOnClickListener {
-            searchHistoryVisibility(true)
+            viewModel.getTracksHistory()
         }
 
         binding.back.setNavigationOnClickListener {
             finish()
         }
-    }
-
-    private fun searchHistoryVisibility(hasFocus: Boolean) {
-        binding.searchHistory.isVisible =
-            binding.inputSearch.text.isEmpty() && hasFocus && viewModel.getTracksHistory()
-                .isNotEmpty()
-
-
-        onInitHistory()
     }
 
     private fun hideKeyboard(view: View) {
@@ -150,13 +153,13 @@ class SearchActivity : AppCompatActivity() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun onChangedHistory() {
-        binding.recyclerViewHistorySearch.adapter?.notifyDataSetChanged()
+    private fun historyVisibility(hasFocus: Boolean, historyIsNotEmpty: Boolean) {
+        binding.searchHistory.isVisible =
+            binding.inputSearch.text.isEmpty() && hasFocus && historyIsNotEmpty
     }
 
-    private fun onInitHistory() {
-        binding.recyclerViewHistorySearch.adapter =
-            SearchHistoryAdapter(viewModel.getTracksHistory(), onClick = ::onClickTrack)
+    private fun onChangedHistory() {
+        binding.recyclerViewHistorySearch.adapter?.notifyDataSetChanged()
     }
 
     private fun onClickTrack(track: TrackUI, remember: Boolean) {

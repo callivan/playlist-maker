@@ -21,5 +21,7 @@ class Theme(private val context: Application) : Theme {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+
+        sharedPrefs.edit().putBoolean(Const.THEME, isDarkTheme).apply()
     }
 }

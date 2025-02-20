@@ -96,21 +96,24 @@ class SearchViewModel(
         inputTextLiveData.postValue("")
     }
 
-    fun getTracksHistory(): List<TrackUI> {
-        return tracksHistoryInteractor.get().map {
-            TrackUI(
-                country = it.country,
-                trackId = it.trackId,
-                trackName = it.trackName,
-                previewUrl = it.previewUrl,
-                artistName = it.artistName,
-                releaseDate = it.releaseDate,
-                artworkUrl100 = it.artworkUrl100,
-                collectionName = it.collectionName,
-                trackTimeMillis = it.trackTimeMillis,
-                primaryGenreName = it.primaryGenreName,
-            )
-        }
+    fun getTracksHistory() {
+        tracksSearchScreenStateLiveData.postValue(
+            TracksSearchScreenState.History(
+                tracksHistoryInteractor.get().map {
+                    TrackUI(
+                        country = it.country,
+                        trackId = it.trackId,
+                        trackName = it.trackName,
+                        previewUrl = it.previewUrl,
+                        artistName = it.artistName,
+                        releaseDate = it.releaseDate,
+                        artworkUrl100 = it.artworkUrl100,
+                        collectionName = it.collectionName,
+                        trackTimeMillis = it.trackTimeMillis,
+                        primaryGenreName = it.primaryGenreName,
+                    )
+                })
+        )
     }
 
     fun addTrackInHistory(track: TrackUI) {

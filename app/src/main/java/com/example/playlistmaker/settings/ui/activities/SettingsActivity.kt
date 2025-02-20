@@ -37,7 +37,9 @@ class SettingsActivity : AppCompatActivity() {
             binding.themeSwitch.isChecked = isDarkTheme
         }
 
-        binding.themeSwitch.setOnCheckedChangeListener { _, checked -> viewModel.switchTheme(checked) }
+        binding.themeSwitch.setOnCheckedChangeListener { _, checked ->
+            viewModel.switchTheme(checked)
+        }
 
 
         binding.back.setNavigationOnClickListener {

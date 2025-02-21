@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,12 +19,11 @@ import com.example.playlistmaker.search.ui.models.TracksSearchScreenState
 import com.example.playlistmaker.search.ui.models.TrackUI
 import com.example.playlistmaker.search.ui.viewModels.SearchViewModel
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<SearchViewModel> {
-        SearchViewModel.getViewModelFactory()
-    }
+    private val viewModel by viewModel<SearchViewModel>()
 
     private lateinit var binding: ActivitySearchBinding
 

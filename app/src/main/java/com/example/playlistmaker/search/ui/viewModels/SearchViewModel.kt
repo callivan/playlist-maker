@@ -1,17 +1,10 @@
 package com.example.playlistmaker.search.ui.viewModels
 
-import android.app.Application
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.TracksHistoryCreator
-import com.example.playlistmaker.creator.TracksSearchCreator
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.TracksHistoryIntercator
 import com.example.playlistmaker.search.domain.models.TracksInteractor
@@ -136,21 +129,5 @@ class SearchViewModel(
     fun cleanTracksHistory() {
         tracksHistoryInteractor.clean()
         tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Init)
-    }
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-
-                val context = this[APPLICATION_KEY] as Application
-
-                SearchViewModel(
-                    tracksSearchInteractor = TracksSearchCreator.provideTracksInteractor(),
-                    tracksHistoryInteractor = TracksHistoryCreator.provideTracksHistoryInteractor(
-                        context
-                    )
-                )
-            }
-        }
     }
 }

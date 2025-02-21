@@ -1,9 +1,7 @@
 package com.example.playlistmaker.player.ui.activities
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.ViewCompat
@@ -18,11 +16,10 @@ import com.example.playlistmaker.player.ui.models.PlayerScreenState
 import com.example.playlistmaker.player.ui.viewModels.TrackViewModel
 import com.example.playlistmaker.utils.Utils
 import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TrackActivity : AppCompatActivity() {
-    private val viewModel by viewModels<TrackViewModel> {
-        TrackViewModel.getViewModelFactory()
-    }
+    private val viewModel by viewModel<TrackViewModel>()
 
     private lateinit var binding: ActivityTrackBinding
 

@@ -1,12 +1,12 @@
 package com.example.playlistmaker.theme.data.sharedPrefs
 
-import android.app.Application
 import android.app.Application.MODE_PRIVATE
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.consts.Const
 import com.example.playlistmaker.theme.data.Theme
 
-class Theme(private val context: Application) : Theme {
+class Theme(private val context: Context) : Theme {
     val sharedPrefs = context.getSharedPreferences(Const.THEME_PREFS, MODE_PRIVATE)
 
     override fun get(): Boolean {

@@ -4,18 +4,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.settings.ui.viewModels.SettingsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private val viewModel by viewModels<SettingsViewModel> {
-        SettingsViewModel.getViewModelFactory()
-    }
+    private val viewModel by viewModel<SettingsViewModel>()
 
     private lateinit var binding: ActivitySettingsBinding
 
@@ -33,9 +31,9 @@ class SettingsActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        viewModel.getThemeLiveData().observe(this) { isDarkTheme ->
-            binding.themeSwitch.isChecked = isDarkTheme
-        }
+//        viewModel.getThemeLiveData().observe(this) { isDarkTheme ->
+//            binding.themeSwitch.isChecked = isDarkTheme
+//        }
 
         binding.themeSwitch.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)

@@ -4,9 +4,6 @@ import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.player.ui.models.PlayerScreenState
 import com.example.playlistmaker.utils.Utils
 
@@ -73,13 +70,5 @@ class TrackViewModel() : ViewModel() {
 
     override fun onCleared() {
         release()
-    }
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                TrackViewModel()
-            }
-        }
     }
 }

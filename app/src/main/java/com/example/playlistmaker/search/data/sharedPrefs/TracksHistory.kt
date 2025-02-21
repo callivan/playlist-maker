@@ -1,6 +1,6 @@
 package com.example.playlistmaker.search.data.sharedPrefs
 
-import android.app.Application
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import com.example.playlistmaker.consts.Const
 import com.example.playlistmaker.search.data.History
@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken
 private val history: MutableList<TrackDto> = mutableListOf()
 
 class TracksHistory(
-    private val context: Application
+    private val context: Context
 ) : History {
 
     private val sharedPrefs = context.getSharedPreferences(Const.SEARCH_HISTORY_PREFS, MODE_PRIVATE)

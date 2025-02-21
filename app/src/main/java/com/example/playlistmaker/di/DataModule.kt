@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 val dataModule = module {
-    factory { Theme(androidContext()) }
+    single<com.example.playlistmaker.theme.data.Theme> { Theme(androidContext()) }
 
     single<History> {
         TracksHistory(androidContext())

@@ -9,6 +9,10 @@ import com.example.playlistmaker.theme.data.Theme
 class Theme(private val context: Context) : Theme {
     val sharedPrefs = context.getSharedPreferences(Const.THEME_PREFS, MODE_PRIVATE)
 
+    init {
+        switch(get())
+    }
+
     override fun get(): Boolean {
         return sharedPrefs.getBoolean(Const.THEME, false)
     }

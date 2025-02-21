@@ -31,9 +31,9 @@ class SettingsActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-//        viewModel.getThemeLiveData().observe(this) { isDarkTheme ->
-//            binding.themeSwitch.isChecked = isDarkTheme
-//        }
+        viewModel.getThemeLiveData().observe(this) { isDarkTheme ->
+            binding.themeSwitch.isChecked = isDarkTheme
+        }
 
         binding.themeSwitch.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)

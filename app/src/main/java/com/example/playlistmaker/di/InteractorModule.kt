@@ -12,7 +12,7 @@ import com.example.playlistmaker.theme.domain.models.ThemeInteractor
 import org.koin.dsl.module
 
 val interactorModule = module {
-    factory<ThemeInteractor> {
+    single<ThemeInteractor> {
         ThemeInteractorImpl(get<ThemeRepository>())
     }
 

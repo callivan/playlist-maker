@@ -157,4 +157,17 @@
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
+
+    <style name="Widget.Theme.PlaylistMaker.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
+
+    <style name="TabText">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/text_size_xm</item>
+        <item name="android:lineHeight">@dimen/line_height_xm</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
 </resources>

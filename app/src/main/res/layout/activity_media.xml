@@ -6,13 +6,33 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSecondary"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".placeholdersActivities.MediaActivity">
+    tools:context=".media.ui.activities.MediaActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/back"
+        style="@style/Title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Media Activity" />
+        app:navigationIcon="@drawable/arrow_left"
+        app:title="@string/media" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSecondary"
+        app:tabIndicator="@drawable/tab_indicator"
+        app:tabIndicatorColor="?attr/colorSecondaryVariant"
+        app:tabIndicatorHeight="2dp"
+        app:tabTextAppearance="@style/TabText"
+        app:tabTextColor="?attr/colorSecondaryVariant" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" />
 </LinearLayout>

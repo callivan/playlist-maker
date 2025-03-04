@@ -9,7 +9,7 @@
     android:background="?attr/colorSecondary"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".media.ui.activities.MediaActivity">
+    tools:context=".media.ui.fragments.MediaFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back"

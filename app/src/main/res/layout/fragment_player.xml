@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
     android:fitsSystemWindows="true"
-    tools:context=".player.ui.activities.TrackActivity">
+    tools:context=".player.ui.fragments.PlayerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

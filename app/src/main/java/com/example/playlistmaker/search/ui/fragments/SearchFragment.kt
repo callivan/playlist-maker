@@ -1,47 +1,38 @@
-package com.example.playlistmaker.search.ui.activities
+package com.example.playlistmaker.search.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.app.AppCompatActivity.INPUT_METHOD_SERVICE
 import androidx.core.view.isVisible
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.consts.Const
-import com.example.playlistmaker.player.ui.activities.TrackActivity
+import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.media.ui.models.BindingFragment
+import com.example.playlistmaker.player.ui.fragments.PlayerFragment
 import com.example.playlistmaker.search.ui.adapters.SearchHistoryAdapter
 import com.example.playlistmaker.search.ui.adapters.TracksAdapter
-import com.example.playlistmaker.search.ui.models.TracksSearchScreenState
 import com.example.playlistmaker.search.ui.models.TrackUI
+import com.example.playlistmaker.search.ui.models.TracksSearchScreenState
 import com.example.playlistmaker.search.ui.viewModels.SearchViewModel
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-
+class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val viewModel by viewModel<SearchViewModel>()
 
-    private lateinit var binding: ActivitySearchBinding
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-
-        setContentView(binding.root)
-
-        viewModel.getInputTextLiveData().observe(this) { text ->
+        viewModel.getInputTextLiveData().observe(viewLifecycleOwner) { text ->
             binding.btnClean.isVisible = text.isNotEmpty()
 
             if (binding.inputSearch.text.toString() != text) {
@@ -49,8 +40,8 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getTracksSearchScreenStateLiveData().observe(this) { state ->
-            runOnUiThread {
+        viewModel.getTracksSearchScreenStateLiveData().observe(viewLifecycleOwner) { state ->
+            requireActivity().runOnUiThread {
                 when (state) {
                     is TracksSearchScreenState.Init -> {
                         binding.emptyLayout.isVisible = false
@@ -115,7 +106,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.btnClean.setOnClickListener {
-            val view: View? = this.currentFocus
+            val view: View? = requireActivity().currentFocus
 
             if (view != null) {
                 hideKeyboard(view)
@@ -141,12 +132,18 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.back.setNavigationOnClickListener {
-            finish()
+            val fragment = parentFragmentManager.findFragmentById(R.id.root_fragment)
+
+            if (fragment != null) {
+                parentFragmentManager.beginTransaction()
+                    .remove(fragment).commit()
+            }
         }
     }
 
     private fun hideKeyboard(view: View) {
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
@@ -161,15 +158,17 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun onClickTrack(track: TrackUI, remember: Boolean) {
-        val intent = Intent(this, TrackActivity::class.java)
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.root_fragment, PlayerFragment.newInstance(track = Gson().toJson(track))).commit()
 
-        intent.putExtra(Const.TRACK, Gson().toJson(track))
-
-        startActivity(intent)
 
         if (remember) {
             viewModel.addTrackInHistory(track)
             onChangedHistory()
         }
+    }
+
+    companion object {
+        fun newInstance() = SearchFragment()
     }
 }

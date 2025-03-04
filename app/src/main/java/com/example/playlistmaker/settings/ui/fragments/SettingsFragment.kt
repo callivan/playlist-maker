@@ -1,37 +1,31 @@
-package com.example.playlistmaker.settings.ui.activities
+package com.example.playlistmaker.settings.ui.fragments
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
+import com.example.playlistmaker.media.ui.models.BindingFragment
 import com.example.playlistmaker.settings.ui.viewModels.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
     private val viewModel by viewModel<SettingsViewModel>()
 
-    private lateinit var binding: ActivitySettingsBinding
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentSettingsBinding {
+        return FragmentSettingsBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_settings)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-
-        setContentView(binding.root)
-
-        viewModel.getThemeLiveData().observe(this) { isDarkTheme ->
+        viewModel.getThemeLiveData().observe(viewLifecycleOwner) { isDarkTheme ->
             binding.themeSwitch.isChecked = isDarkTheme
         }
 
@@ -41,7 +35,12 @@ class SettingsActivity : AppCompatActivity() {
 
 
         binding.back.setNavigationOnClickListener {
-            finish()
+            val fragment = parentFragmentManager.findFragmentById(R.id.root_fragment)
+
+            if (fragment != null) {
+                parentFragmentManager.beginTransaction()
+                    .remove(fragment).commit()
+            }
         }
 
         binding.btnShare.setOnClickListener {
@@ -81,5 +80,9 @@ class SettingsActivity : AppCompatActivity() {
 
             startActivity(intent)
         }
+    }
+
+    companion object {
+        fun newInstance() = SettingsFragment()
     }
 }

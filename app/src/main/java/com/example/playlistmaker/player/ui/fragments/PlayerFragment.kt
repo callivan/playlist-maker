@@ -1,49 +1,43 @@
-package com.example.playlistmaker.player.ui.activities
+package com.example.playlistmaker.player.ui.fragments
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.consts.Const
-import com.example.playlistmaker.databinding.ActivityTrackBinding
-import com.example.playlistmaker.player.ui.models.TrackUI
+import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.media.ui.models.BindingFragment
 import com.example.playlistmaker.player.ui.models.PlayerScreenState
+import com.example.playlistmaker.player.ui.models.TrackUI
 import com.example.playlistmaker.player.ui.viewModels.TrackViewModel
+import com.example.playlistmaker.search.ui.fragments.SearchFragment
 import com.example.playlistmaker.utils.Utils
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TrackActivity : AppCompatActivity() {
+
+class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     private val viewModel by viewModel<TrackViewModel>()
-
-    private lateinit var binding: ActivityTrackBinding
-
-    private lateinit var group: Group
 
     private val utils = Utils
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_track)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentPlayerBinding {
+        return FragmentPlayerBinding.inflate(inflater, container, false)
+    }
 
-        binding = ActivityTrackBinding.inflate(layoutInflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setContentView(binding.root)
-
-        group = findViewById(R.id.group)
-
-        val track = Gson().fromJson(intent.getStringExtra(Const.TRACK), TrackUI::class.java)
+        val track = Gson().fromJson(
+            requireArguments().getString(Const.TRACK), TrackUI::class.java
+        )
 
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .centerCrop().placeholder(R.drawable.placeholder).into(binding.trackImage)
@@ -53,7 +47,7 @@ class TrackActivity : AppCompatActivity() {
         binding.trackDuration.text = utils.msToMinSec(track.trackTimeMillis)
 
         binding.trackAlbum.text = track.collectionName
-        group.isVisible = track.collectionName != null
+        binding.group.isVisible = track.collectionName != null
 
         binding.trackYear.text = utils.dateToYear(track.releaseDate)
         binding.trackGenre.text = track.primaryGenreName
@@ -61,7 +55,7 @@ class TrackActivity : AppCompatActivity() {
 
         viewModel.prepare(track.previewUrl)
 
-        viewModel.getPlayerScreenStateLiveData().observe(this) { state ->
+        viewModel.getPlayerScreenStateLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlayerScreenState.Pending -> {
                     binding.btnPlay.isEnabled = false
@@ -88,7 +82,8 @@ class TrackActivity : AppCompatActivity() {
         }
 
         binding.btnBack.setOnClickListener {
-            finish()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.root_fragment, SearchFragment.newInstance()).commit()
         }
 
         binding.btnPlay.setOnClickListener {
@@ -101,8 +96,14 @@ class TrackActivity : AppCompatActivity() {
         viewModel.pause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDetach() {
+        super.onDetach()
         viewModel.release()
+    }
+
+    companion object {
+        fun newInstance(track: String) = PlayerFragment().apply {
+            arguments = bundleOf(Const.TRACK to track)
+        }
     }
 }

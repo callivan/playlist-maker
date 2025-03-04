@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:paddingTop="14dp"
     android:paddingBottom="28dp"
-    tools:context=".main.ui.activities.MainActivity">
+    tools:context=".root.ui.activities.RootActivity">
 
     <TextView
         style="@style/Title"
@@ -54,4 +54,12 @@
         android:layout_weight="1"
         android:text="@string/settings"
         app:icon="@drawable/settings" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/root_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"/>
 </LinearLayout>

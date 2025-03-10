@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/track"
-    style="@style/Track"
+    style="@style/track"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/trackName"
-        style="@style/TrackName"
+        style="@style/trackName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/trackArtist"
-        style="@style/TrackSmallText"
+        style="@style/textS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -65,7 +65,7 @@
 
     <TextView
         android:id="@+id/trackTime"
-        style="@style/TrackSmallText"
+        style="@style/textS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"

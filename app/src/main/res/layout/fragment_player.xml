@@ -2,12 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
     android:fitsSystemWindows="true"
-    tools:context=".player.ui.activities.TrackActivity">
+    tools:context=".player.ui.fragments.PlayerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -43,7 +42,7 @@
 
         <TextView
             android:id="@+id/trackName"
-            style="@style/TrackNameDetail"
+            style="@style/trackNameDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/indent_xxl"
@@ -55,7 +54,7 @@
 
         <TextView
             android:id="@+id/trackAuthor"
-            style="@style/TrackAuthorDetail"
+            style="@style/trackAuthorDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/indent_xxl"
@@ -110,7 +109,7 @@
 
         <TextView
             android:id="@+id/trackTime"
-            style="@style/TrackAuthorDetail"
+            style="@style/trackAuthorDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/indent_s"
@@ -128,7 +127,7 @@
 
         <TextView
             android:id="@+id/trackDurationTitle"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/indent_m"
@@ -141,7 +140,7 @@
 
         <TextView
             android:id="@+id/trackDuration"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/icon_indent"
@@ -155,7 +154,7 @@
 
         <TextView
             android:id="@+id/trackAlbumTitle"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/indent_m"
@@ -168,7 +167,7 @@
 
         <TextView
             android:id="@+id/trackAlbum"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/icon_indent"
@@ -182,7 +181,7 @@
 
         <TextView
             android:id="@+id/trackYearTitle"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/indent_m"
@@ -195,7 +194,7 @@
 
         <TextView
             android:id="@+id/trackYear"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/icon_indent"
@@ -209,7 +208,7 @@
 
         <TextView
             android:id="@+id/trackGenreTitle"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/indent_m"
@@ -222,7 +221,7 @@
 
         <TextView
             android:id="@+id/trackGenre"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/icon_indent"
@@ -236,7 +235,7 @@
 
         <TextView
             android:id="@+id/trackCountryTitle"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/indent_m"
@@ -249,7 +248,7 @@
 
         <TextView
             android:id="@+id/trackCountry"
-            style="@style/TrackDetail"
+            style="@style/trackDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/icon_indent"

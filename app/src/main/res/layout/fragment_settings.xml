@@ -2,26 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".settings.ui.activities.SettingsActivity">
+    tools:context=".settings.ui.fragments.SettingsFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/back"
-        style="@style/Title"
+    <TextView
+        style="@style/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        app:navigationIcon="@drawable/arrow_left"
-        app:title="@string/settings" />
+        android:paddingHorizontal="@dimen/indent_m"
+        android:paddingTop="14dp"
+        android:text="@string/settings" />
 
     <Switch
         android:id="@+id/themeSwitch"
-        style="@style/Switch"
+        style="@style/switcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineHeight="@dimen/line_height_m"
@@ -35,7 +34,7 @@
 
     <Button
         android:id="@+id/btnShare"
-        style="@style/BtnSettingsOption"
+        style="@style/btnOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/share"
@@ -43,7 +42,7 @@
 
     <Button
         android:id="@+id/btnSupport"
-        style="@style/BtnSettingsOption"
+        style="@style/btnOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/support"
@@ -51,7 +50,7 @@
 
     <Button
         android:id="@+id/btnAgreement"
-        style="@style/BtnSettingsOption"
+        style="@style/btnOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/agreement"

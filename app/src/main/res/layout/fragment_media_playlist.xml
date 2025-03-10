@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/btnCleanHistory"
-        style="@style/BtnUpdate"
+        style="@style/btnXM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -27,7 +27,7 @@
         android:src="@drawable/empty" />
 
     <TextView
-        style="@style/TextError"
+        style="@style/textB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/empty_media_playlist"

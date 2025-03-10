@@ -51,7 +51,6 @@ class SearchFragment : Fragment() {
             requireActivity().runOnUiThread {
                 when (state) {
                     is TracksSearchScreenState.Init -> {
-                        println("INIT")
                         binding.emptyLayout.isVisible = false
                         binding.errorLayout.isVisible = false
                         binding.recyclerViewTracks.isVisible = false
@@ -60,7 +59,6 @@ class SearchFragment : Fragment() {
                     }
 
                     is TracksSearchScreenState.Pending -> {
-                        println("PENDING")
                         binding.emptyLayout.isVisible = false
                         binding.errorLayout.isVisible = false
                         binding.recyclerViewTracks.isVisible = false
@@ -69,7 +67,6 @@ class SearchFragment : Fragment() {
                     }
 
                     is TracksSearchScreenState.Content -> {
-                        println("CONTENT")
                         binding.emptyLayout.isVisible = false
                         binding.errorLayout.isVisible = false
                         binding.recyclerViewTracks.isVisible = true
@@ -81,7 +78,6 @@ class SearchFragment : Fragment() {
                     }
 
                     is TracksSearchScreenState.Empty -> {
-                        println("EMPTY")
                         binding.emptyLayout.isVisible = true
                         binding.errorLayout.isVisible = false
                         binding.recyclerViewTracks.isVisible = false
@@ -90,7 +86,6 @@ class SearchFragment : Fragment() {
                     }
 
                     is TracksSearchScreenState.Error -> {
-                        println("ERROR")
                         binding.emptyLayout.isVisible = false
                         binding.errorLayout.isVisible = true
                         binding.recyclerViewTracks.isVisible = false
@@ -99,7 +94,6 @@ class SearchFragment : Fragment() {
                     }
 
                     is TracksSearchScreenState.History -> {
-                        println("HISTORY")
                         binding.recyclerViewHistorySearch.adapter =
                             SearchHistoryAdapter(
                                 state.tracks,

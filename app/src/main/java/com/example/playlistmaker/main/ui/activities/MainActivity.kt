@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.bottomMenu.isVisible = destination.id != R.id.playerFragment
+            binding.divider.isVisible = destination.id != R.id.playerFragment
         }
     }
 }

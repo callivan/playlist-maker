@@ -6,7 +6,7 @@
         <item name="android:lineHeight">@dimen/line_height_l</item>
         <item name="android:textSize">@dimen/text_size_l</item>
         <item name="android:textFontWeight">500</item>
-        <item name="android:color">?attr/colorSecondaryVariant</item>>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>>
     </style>
 
     <style name="searchWrapper">

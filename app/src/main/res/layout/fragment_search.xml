@@ -2,25 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSecondary"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".search.ui.activities.SearchActivity">
+    tools:context=".search.ui.fragments.SearchFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/back"
-        style="@style/Title"
+    <TextView
+        style="@style/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        app:navigationIcon="@drawable/arrow_left"
-        app:title="@string/search" />
+        android:paddingHorizontal="@dimen/indent_m"
+        android:paddingTop="14dp"
+        android:text="@string/search" />
 
     <FrameLayout
-        style="@style/SearchWrapper"
+        style="@style/searchWrapper"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginHorizontal="@dimen/indent_m"
@@ -28,7 +27,7 @@
         android:background="@drawable/rounded_corners_x">
 
         <ImageView
-            style="@style/SearchIcon"
+            style="@style/searchIcon"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_gravity="center_vertical"
@@ -36,7 +35,7 @@
 
         <EditText
             android:id="@+id/inputSearch"
-            style="@style/SearchInput"
+            style="@style/searchInput"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
@@ -48,7 +47,7 @@
 
         <ImageButton
             android:id="@+id/btnClean"
-            style="@style/SearchBtnClean"
+            style="@style/btnSearchClean"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
@@ -80,7 +79,7 @@
         android:visibility="gone">
 
         <TextView
-            style="@style/SearchTitle"
+            style="@style/searchTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -97,7 +96,7 @@
 
         <Button
             android:id="@+id/btnCleanHistory"
-            style="@style/BtnUpdate"
+            style="@style/btnXM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -122,7 +121,7 @@
             android:src="@drawable/empty" />
 
         <TextView
-            style="@style/TextError"
+            style="@style/textB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/empty"
@@ -146,7 +145,7 @@
             android:src="@drawable/error" />
 
         <TextView
-            style="@style/TextError"
+            style="@style/textB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/indent_s"
@@ -156,7 +155,7 @@
 
         <Button
             android:id="@+id/btnUpdate"
-            style="@style/BtnUpdate"
+            style="@style/btnXM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

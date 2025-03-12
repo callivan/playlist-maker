@@ -130,4 +130,8 @@ class SearchViewModel(
         tracksHistoryInteractor.clean()
         tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Init)
     }
+
+    fun cleanTracksSearchScreenState() {
+        tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Init)
+    }
 }

@@ -1,47 +1,40 @@
-package com.example.playlistmaker.settings.ui.activities
+package com.example.playlistmaker.settings.ui.fragments
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.settings.ui.viewModels.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.core.net.toUri
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
     private val viewModel by viewModel<SettingsViewModel>()
 
-    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: FragmentSettingsBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_settings)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setContentView(binding.root)
-
-        viewModel.getThemeLiveData().observe(this) { isDarkTheme ->
+        viewModel.getThemeLiveData().observe(viewLifecycleOwner) { isDarkTheme ->
             binding.themeSwitch.isChecked = isDarkTheme
         }
 
         binding.themeSwitch.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
-        }
-
-
-        binding.back.setNavigationOnClickListener {
-            finish()
         }
 
         binding.btnShare.setOnClickListener {
@@ -62,7 +55,7 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.btnSupport.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:")
+            intent.data = "mailto:".toUri()
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail)))
             intent.putExtra(
                 Intent.EXTRA_SUBJECT,
@@ -77,7 +70,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.btnAgreement.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.agreement_link)))
+            val intent = Intent(Intent.ACTION_VIEW, getString(R.string.agreement_link).toUri())
 
             startActivity(intent)
         }

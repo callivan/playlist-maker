@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.consts.Const
@@ -18,6 +19,7 @@ import com.example.playlistmaker.search.ui.adapters.TracksAdapter
 import com.example.playlistmaker.search.ui.models.TracksSearchScreenState
 import com.example.playlistmaker.search.ui.models.TrackUI
 import com.example.playlistmaker.search.ui.viewModels.SearchViewModel
+import com.example.playlistmaker.utils.Utils
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,6 +28,9 @@ class SearchFragment : Fragment() {
     private val viewModel by viewModel<SearchViewModel>()
 
     private lateinit var binding: FragmentSearchBinding
+
+    private var onClickTrack: ((track: TrackUI) -> Unit)? = null
+    private var onClickHistoryTrack: ((track: TrackUI) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +43,23 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        onClickTrack = Utils.debounce<TrackUI>(
+            300L,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            onClick(track)
+
+            viewModel.addTrackInHistory(track)
+            onChangedHistory()
+        }
+
+        onClickHistoryTrack = Utils.debounce<TrackUI>(
+            300L,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track -> onClick(track) }
 
         viewModel.getInputTextLiveData().observe(viewLifecycleOwner) { text ->
             binding.btnClean.isVisible = text.isNotEmpty()
@@ -73,8 +95,10 @@ class SearchFragment : Fragment() {
                         binding.progressBar.isVisible = false
                         binding.searchHistory.isVisible = false
 
-                        binding.recyclerViewTracks.adapter =
-                            TracksAdapter(state.tracks, onClick = ::onClickTrack)
+                        if (onClickTrack != null) {
+                            binding.recyclerViewTracks.adapter =
+                                TracksAdapter(state.tracks, onClick = onClickTrack!!)
+                        }
                     }
 
                     is TracksSearchScreenState.Empty -> {
@@ -94,12 +118,13 @@ class SearchFragment : Fragment() {
                     }
 
                     is TracksSearchScreenState.History -> {
-                        binding.recyclerViewHistorySearch.adapter =
-                            SearchHistoryAdapter(
-                                state.tracks,
-                                onClick = ::onClickTrack
-                            )
-
+                        if (onClickHistoryTrack != null) {
+                            binding.recyclerViewHistorySearch.adapter =
+                                SearchHistoryAdapter(
+                                    state.tracks,
+                                    onClick = onClickHistoryTrack!!
+                                )
+                        }
                         historyVisibility(binding.inputSearch.hasFocus(), state.tracks.isNotEmpty())
 
                         onChangedHistory()
@@ -155,7 +180,7 @@ class SearchFragment : Fragment() {
         binding.recyclerViewHistorySearch.adapter?.notifyDataSetChanged()
     }
 
-    private fun onClickTrack(track: TrackUI, remember: Boolean) {
+    private fun onClick(track: TrackUI) {
         findNavController().navigate(
             R.id.action_searchFragment_to_playerFragment,
             bundleOf(
@@ -164,10 +189,5 @@ class SearchFragment : Fragment() {
         )
 
         viewModel.cleanTracksSearchScreenState()
-
-        if (remember) {
-            viewModel.addTrackInHistory(track)
-            onChangedHistory()
-        }
     }
 }

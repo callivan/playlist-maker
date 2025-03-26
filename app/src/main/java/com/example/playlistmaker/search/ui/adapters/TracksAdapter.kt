@@ -3,14 +3,13 @@ package com.example.playlistmaker.search.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.TrackViewBinding
 import com.example.playlistmaker.search.ui.models.TrackUI
 import com.example.playlistmaker.search.ui.viewHolders.TracksViewHolder
 
 class TracksAdapter(
     private val tracks: List<TrackUI>,
-    private val onClick: (track: TrackUI, remember: Boolean) -> Unit
+    private val onClick: (track: TrackUI) -> Unit
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -22,7 +21,7 @@ class TracksAdapter(
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
 
         holder.itemView.setOnClickListener {
-            onClick(tracks[position], true)
+            onClick(tracks[position])
         }
 
         holder.bind(tracks[position])

@@ -9,7 +9,7 @@ import com.example.playlistmaker.search.ui.viewHolders.TracksViewHolder
 
 class SearchHistoryAdapter(
     private val tracks: List<TrackUI>,
-    private val onClick: (track: TrackUI, remember: Boolean) -> Unit
+    private val onClick: (track: TrackUI) -> Unit
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -21,7 +21,7 @@ class SearchHistoryAdapter(
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
 
         holder.itemView.setOnClickListener {
-            onClick(tracks[position], false)
+            onClick(tracks[position])
         }
 
         holder.bind(tracks[position])

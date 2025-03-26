@@ -4,23 +4,24 @@ import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.ui.models.PlayerScreenState
-import com.example.playlistmaker.utils.Utils
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TrackViewModel() : ViewModel() {
     private val player = MediaPlayer()
 
-    private var removeDebounce: (() -> Unit)? = null
+    private var timerJob: Job? = null
 
     private fun setProgress() {
-        val debouncePlayerProgressWithThread = Utils.debounceWithThread({
-            playerScreenStateLiveData.postValue(PlayerScreenState.Playing(progress = player.currentPosition))
-            setProgress()
-        }, 300L)
-
-        debouncePlayerProgressWithThread.debounce()
-
-        removeDebounce = debouncePlayerProgressWithThread.remove
+        timerJob = viewModelScope.launch {
+            while (player.isPlaying) {
+                delay(300L)
+                playerScreenStateLiveData.postValue(PlayerScreenState.Playing(progress = player.currentPosition))
+            }
+        }
     }
 
     private val playerScreenStateLiveData =
@@ -36,13 +37,13 @@ class TrackViewModel() : ViewModel() {
 
     fun pause() {
         player.pause()
-        removeDebounce?.invoke()
+        timerJob?.cancel()
         playerScreenStateLiveData.postValue(PlayerScreenState.Paused)
     }
 
     fun release() {
         player.release()
-        removeDebounce?.invoke()
+        timerJob?.cancel()
         playerScreenStateLiveData.postValue(PlayerScreenState.Released)
     }
 
@@ -64,7 +65,7 @@ class TrackViewModel() : ViewModel() {
 
         player.setOnCompletionListener {
             playerScreenStateLiveData.postValue(PlayerScreenState.Completed)
-            removeDebounce?.invoke()
+            timerJob?.cancel()
         }
     }
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
@@ -17,6 +18,8 @@ import com.example.playlistmaker.player.ui.models.PlayerScreenState
 import com.example.playlistmaker.player.ui.viewModels.TrackViewModel
 import com.example.playlistmaker.utils.Utils
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerFragment : Fragment() {
@@ -58,6 +61,8 @@ class PlayerFragment : Fragment() {
 
         viewModel.prepare(track.previewUrl)
 
+        existsInFavoriteDb(track.trackId)
+
         viewModel.getPlayerScreenStateLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlayerScreenState.Pending -> {
@@ -91,6 +96,41 @@ class PlayerFragment : Fragment() {
         binding.btnPlay.setOnClickListener {
             viewModel.playbackController()
             it.startAnimation(btnClickAnimation)
+        }
+
+        binding.favor.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                viewModel.existsInFavoriteDb(track.trackId).collect { state ->
+
+                    if (state) {
+                        viewModel.deleteFromFavoriteDb(track.trackId)
+                    } else {
+                        viewModel.insertInFavoriteDb(track)
+                    }
+
+                    printFavoriteBtn(!state)
+                    it.startAnimation(btnClickAnimation)
+                }
+            }
+        }
+    }
+
+    private fun printFavoriteBtn(state: Boolean) {
+        requireActivity().runOnUiThread {
+            if (state) {
+                binding.favor.setImageResource(R.drawable.favorite_on)
+            } else {
+                binding.favor.setImageResource(R.drawable.favourite_off)
+            }
+        }
+    }
+
+
+    private fun existsInFavoriteDb(id: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.existsInFavoriteDb(id).collect { state ->
+                printFavoriteBtn(state)
+            }
         }
     }
 

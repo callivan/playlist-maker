@@ -16,8 +16,8 @@ class PagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> MediaFavoriteFragment.newInstance()
-            else -> MediaPlaylistFragment.newInstance()
+            0 -> MediaFavoriteFragment()
+            else -> MediaPlaylistFragment()
         }
     }
 }

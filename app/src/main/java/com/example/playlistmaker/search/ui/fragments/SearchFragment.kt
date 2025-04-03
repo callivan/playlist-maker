@@ -95,10 +95,13 @@ class SearchFragment : Fragment() {
                         binding.progressBar.isVisible = false
                         binding.searchHistory.isVisible = false
 
-                        if (onClickTrack != null) {
-                            binding.recyclerViewTracks.adapter =
-                                TracksAdapter(state.tracks, onClick = onClickTrack!!)
-                        }
+                        binding.recyclerViewTracks.adapter =
+                            TracksAdapter(state.tracks, onClick = { track ->
+                                onClickTrack?.let {
+                                    it(track)
+                                }
+                            })
+
                     }
 
                     is TracksSearchScreenState.Empty -> {
@@ -118,13 +121,16 @@ class SearchFragment : Fragment() {
                     }
 
                     is TracksSearchScreenState.History -> {
-                        if (onClickHistoryTrack != null) {
-                            binding.recyclerViewHistorySearch.adapter =
-                                SearchHistoryAdapter(
-                                    state.tracks,
-                                    onClick = onClickHistoryTrack!!
-                                )
-                        }
+                        binding.recyclerViewHistorySearch.adapter =
+                            SearchHistoryAdapter(
+                                state.tracks,
+                                onClick = { track ->
+                                    onClickHistoryTrack?.let {
+                                        it(track)
+                                    }
+                                }
+                            )
+
                         historyVisibility(binding.inputSearch.hasFocus(), state.tracks.isNotEmpty())
 
                         onChangedHistory()

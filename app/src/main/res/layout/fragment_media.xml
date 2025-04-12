@@ -22,6 +22,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:background="?attr/colorSecondary"
         android:contentDescription="@string/app_name"
         app:tabIndicator="@drawable/tab_indicator"

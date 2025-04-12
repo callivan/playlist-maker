@@ -1,19 +1,25 @@
 package com.example.playlistmaker.media.ui.fragments
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentMediaPlaylistBinding
-import com.example.playlistmaker.media.ui.models.BindingFragment
 
-class MediaPlaylistFragment : BindingFragment<FragmentMediaPlaylistBinding>() {
-    override fun createBinding(
+class MediaPlaylistFragment : Fragment() {
+    private lateinit var binding: FragmentMediaPlaylistBinding
+
+    override fun onCreateView(
         inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentMediaPlaylistBinding {
-        return FragmentMediaPlaylistBinding.inflate(inflater, container, false)
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentMediaPlaylistBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        fun newInstance() = MediaPlaylistFragment()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 }

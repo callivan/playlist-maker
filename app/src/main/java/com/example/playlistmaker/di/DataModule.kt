@@ -1,6 +1,9 @@
 package com.example.playlistmaker.di
 
+import androidx.room.Room
 import com.example.playlistmaker.consts.Const
+import com.example.playlistmaker.media.data.converters.TrackDbConverter
+import com.example.playlistmaker.media.data.db.AppDb
 import com.example.playlistmaker.search.data.History
 import com.example.playlistmaker.search.data.NetworkClient
 import com.example.playlistmaker.search.data.network.ITunesAPIService
@@ -15,6 +18,13 @@ import retrofit2.create
 
 val dataModule = module {
     single<com.example.playlistmaker.theme.data.Theme> { Theme(androidContext()) }
+
+    factory<TrackDbConverter> { TrackDbConverter() }
+
+    single<AppDb> {
+        Room.databaseBuilder(androidContext(), AppDb::class.java, "database")
+            .build()
+    }
 
     single<History> {
         TracksHistory(androidContext())

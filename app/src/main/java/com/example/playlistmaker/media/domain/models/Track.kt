@@ -1,8 +1,9 @@
-package com.example.playlistmaker.search.ui.models
+package com.example.playlistmaker.media.domain.models
 
 import java.util.Date
 
-data class TrackUI(
+data class Track(
+    val id: Long,
     val previewUrl: String,
     val trackId: String,
     val trackName: String,
@@ -12,5 +13,5 @@ data class TrackUI(
     val collectionName: String?,
     val releaseDate: Date,
     val primaryGenreName: String,
-    val country: String,
+    val country: String
 )

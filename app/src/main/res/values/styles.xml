@@ -165,4 +165,9 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <style name="playerSecondaryBtn">
+        <item name="android:backgroundTint">@color/gray_medium</item>
+        <item name="android:background">@drawable/rounded</item>
+    </style>
 </resources>

@@ -65,13 +65,12 @@
             tools:text="@tools:sample/lorem" />
 
         <ImageButton
+            style="@style/playerSecondaryBtn"
             android:id="@+id/playlist"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="@dimen/indent_xxl"
             android:layout_marginEnd="64dp"
-            android:background="@drawable/rounded"
-            android:backgroundTint="@color/gray_medium"
             android:src="@drawable/playlist"
             app:layout_constraintBottom_toTopOf="@id/btnPlay"
             app:layout_constraintEnd_toEndOf="@id/btnPlay"
@@ -92,14 +91,13 @@
             app:layout_constraintTop_toBottomOf="@id/trackAuthor" />
 
         <ImageButton
+            style="@style/playerSecondaryBtn"
             android:id="@+id/favor"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="64dp"
             android:layout_marginEnd="@dimen/indent_xxl"
-            android:background="@drawable/rounded"
-            android:backgroundTint="@color/gray_medium"
-            android:src="@drawable/favourites"
+            android:src="@drawable/favourite_off"
             app:layout_constraintBottom_toTopOf="@id/btnPlay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"

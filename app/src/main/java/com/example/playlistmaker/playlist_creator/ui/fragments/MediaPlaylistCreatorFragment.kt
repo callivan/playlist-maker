@@ -6,6 +6,7 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -60,14 +61,23 @@ class MediaPlaylistCreatorFragment() : Fragment() {
 
         val trackId = arguments?.getString(Const.TRACK_ID)
 
-        val alertDialog = AlertDialog.Builder(requireContext()).setTitle("Внимание!")
-            .setMessage("Вы уверены что хотите покинуть страницу?")
-            .setPositiveButton("ОК") { dialog, _ ->
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.modal_end_playlist_creating_title))
+            .setMessage(getString(R.string.modal_end_playlist_creating_text))
+            .setPositiveButton(getString(R.string.end)) { dialog, _ ->
                 findNavController().navigateUp()
                 dialog.dismiss()
-            }.setNegativeButton("Отмена") { dialog, _ ->
+            }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
             }.create()
+
+        fun navigateUp() {
+            if (showAlertDialog) {
+                alertDialog.show()
+            } else {
+                findNavController().navigateUp()
+            }
+        }
 
         viewModel.getPlaylistCreatorLiveData().observe(viewLifecycleOwner) { state ->
 
@@ -113,6 +123,14 @@ class MediaPlaylistCreatorFragment() : Fragment() {
             }
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navigateUp()
+                }
+            })
+
         val dashedBorder = CustomDrawers.Companion.drawCustomDashedBorder(
             strokeWidth = 1f.dpToPx(requireContext()),
             dashLength = 28f.dpToPx(requireContext()),
@@ -140,12 +158,7 @@ class MediaPlaylistCreatorFragment() : Fragment() {
         }
 
         binding.back.setOnClickListener {
-
-            if (showAlertDialog) {
-                alertDialog.show()
-            } else {
-                findNavController().navigateUp()
-            }
+            navigateUp()
         }
     }
 }

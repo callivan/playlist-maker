@@ -19,15 +19,14 @@ class TracksAdapter(
     }
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
+        val item = tracks[position]
 
         holder.itemView.setOnClickListener {
-            onClick(tracks[position])
+            onClick(item)
         }
 
-        holder.bind(tracks[position])
+        holder.bind(item)
     }
 
-    override fun getItemCount(): Int {
-        return tracks.size
-    }
+    override fun getItemCount(): Int = tracks.size
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMediaBinding
 import com.example.playlistmaker.media.ui.adapters.PagerAdapter
@@ -29,7 +30,7 @@ class MediaFragment : Fragment() {
 
         binding.pager.adapter = PagerAdapter(
             fragmentManager = childFragmentManager,
-            lifecycle = lifecycle
+            lifecycle = lifecycle,
         )
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
@@ -38,6 +39,7 @@ class MediaFragment : Fragment() {
                 1 -> tab.text = getString(R.string.media_playlist)
             }
         }
+
         tabMediator.attach()
     }
 }

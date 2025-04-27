@@ -7,17 +7,18 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.playlistmaker.media.ui.fragments.MediaFavoriteFragment
 import com.example.playlistmaker.media.ui.fragments.MediaPlaylistFragment
 
-class PagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+class PagerAdapter(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    override fun getItemCount(): Int {
-        return 2
-    }
+    private val fragments = mutableListOf<Fragment>(
+        MediaFavoriteFragment(),
+        MediaPlaylistFragment()
+    )
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> MediaFavoriteFragment()
-            else -> MediaPlaylistFragment()
-        }
-    }
+    override fun getItemCount(): Int = fragments.size
+
+    override fun createFragment(position: Int): Fragment = fragments[position]
 }

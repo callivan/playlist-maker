@@ -1,5 +1,6 @@
 package com.example.playlistmaker.utils
 
+import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -39,6 +40,10 @@ class Utils {
 
         fun dateToYear(date: Date): String {
             return getYear.format(date)
+        }
+
+        fun Float.dpToPx(context: Context): Float {
+            return this * context.resources.displayMetrics.density
         }
     }
 }

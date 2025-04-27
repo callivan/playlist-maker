@@ -36,4 +36,20 @@ class TrackDbConverter {
             primaryGenreName = track.primaryGenreName,
         )
     }
+
+    fun map(track: Track): TrackEntity {
+        return TrackEntity(
+            id = track.id,
+            country = track.country,
+            trackId = track.trackId,
+            trackName = track.trackName,
+            previewUrl = track.previewUrl,
+            artistName = track.artistName,
+            releaseDate = track.releaseDate,
+            artworkUrl100 = track.artworkUrl100,
+            collectionName = track.collectionName,
+            trackTimeMillis = track.trackTimeMillis,
+            primaryGenreName = track.primaryGenreName,
+        )
+    }
 }

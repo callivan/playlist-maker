@@ -1,10 +1,15 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.media.domain.api.FavoriteRepository
+import com.example.playlistmaker.media.domain.api.PlaylistsRepository
 import com.example.playlistmaker.media.domain.impl.FavoriteInteractorImpl
+import com.example.playlistmaker.media.domain.impl.PlaylistsInteractorImpl
 import com.example.playlistmaker.media.domain.models.FavoriteInteractor
-import com.example.playlistmaker.player.domain.impl.MediaFavoriteInteractorImpl
-import com.example.playlistmaker.player.domain.models.MediaFavoriteInteractor
+import com.example.playlistmaker.media.domain.models.PlaylistsInteractor
+import com.example.playlistmaker.player.domain.impl.PlayerInteractorImpl
+import com.example.playlistmaker.player.domain.models.PlayerInteractor
+import com.example.playlistmaker.playlist_creator.domain.impl.PlaylistCreatorInteractorImpl
+import com.example.playlistmaker.playlist_creator.domain.models.PlaylistCreatorInteractor
 import com.example.playlistmaker.search.domain.api.TracksHistoryRepository
 import com.example.playlistmaker.search.domain.api.TracksRepository
 import com.example.playlistmaker.search.domain.impl.TracksHistoryInteractorImpl
@@ -33,6 +38,14 @@ val interactorModule = module {
         FavoriteInteractorImpl(get<FavoriteRepository>())
     }
 
-    single<MediaFavoriteInteractor> { MediaFavoriteInteractorImpl(get<FavoriteInteractor>()) }
+    single<PlaylistsInteractor> { PlaylistsInteractorImpl(get<PlaylistsRepository>()) }
 
+    single<PlayerInteractor> {
+        PlayerInteractorImpl(
+            get<FavoriteInteractor>(),
+            get<PlaylistsInteractor>()
+        )
+    }
+
+    single<PlaylistCreatorInteractor> { PlaylistCreatorInteractorImpl(get<PlaylistsInteractor>()) }
 }

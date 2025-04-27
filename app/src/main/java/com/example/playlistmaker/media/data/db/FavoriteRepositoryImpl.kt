@@ -12,22 +12,22 @@ class FavoriteRepositoryImpl(
     private val trackDbConvertor: TrackDbConverter,
 ) : FavoriteRepository {
 
-    override fun getTracks(): Flow<List<Track>> = flow {
-        val tracks = appDb.favoriteDao().getTracks()
+    override fun getFavoriteTracks(): Flow<List<Track>> = flow {
+        val tracks = appDb.favoriteDao().getFavoriteTracks()
 
         emit(convertFromTrackEntity(tracks))
     }
 
-    override fun existsById(id: String): Flow<Boolean> = flow {
-        emit(appDb.favoriteDao().existsById(id))
+    override fun existsFavoriteTrackById(id: String): Flow<Boolean> = flow {
+        emit(appDb.favoriteDao().existsFavoriteTrackById(id))
     }
 
-    override fun insertTrack(track: TrackEntity) = flow {
-        emit(appDb.favoriteDao().insertTrack(track))
+    override fun insertFavoriteTrack(track: Track) = flow {
+        emit(appDb.favoriteDao().insertFavoriteTrack(trackDbConvertor.map(track)))
     }
 
-    override fun deleteTrackById(id: String): Flow<Unit> = flow {
-        emit(appDb.favoriteDao().deleteTrackById(id))
+    override fun deleteFavoriteTrackById(id: String): Flow<Unit> = flow {
+        emit(appDb.favoriteDao().deleteFavoriteTrackById(id))
     }
 
     private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {

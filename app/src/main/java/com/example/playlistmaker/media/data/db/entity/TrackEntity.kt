@@ -2,7 +2,6 @@ package com.example.playlistmaker.media.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.android.material.internal.ParcelableSparseBooleanArray
 import java.util.Date
 
 @Entity(tableName = "favorite_table")

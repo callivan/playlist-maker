@@ -48,9 +48,7 @@ class MediaPlaylistCreatorFragment() : Fragment() {
         }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaylistCreatorBinding.inflate(inflater, container, false)
         return binding.root
@@ -92,7 +90,7 @@ class MediaPlaylistCreatorFragment() : Fragment() {
 
 
                         showAlertDialog =
-                            state.playlist.img != null && (state.playlist.name.isNotEmpty() || (state.playlist.description != null && state.playlist.description!!.isNotEmpty()))
+                            (state.playlist.img != null && state.playlist.img!!.isNotEmpty()) || state.playlist.name.isNotEmpty() || (state.playlist.description != null && state.playlist.description!!.isNotEmpty())
 
                         Glide.with(requireContext()).load(state.playlist.img?.toUri())
                             .encodeFormat(Bitmap.CompressFormat.WEBP).encodeQuality(70)
@@ -124,8 +122,7 @@ class MediaPlaylistCreatorFragment() : Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
+            this, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     navigateUp()
                 }

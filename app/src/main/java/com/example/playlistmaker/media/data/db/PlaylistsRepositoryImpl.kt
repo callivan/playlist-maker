@@ -4,9 +4,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.example.playlistmaker.consts.Const
 import com.example.playlistmaker.media.data.converters.PlaylistDbConverter
+import com.example.playlistmaker.media.data.converters.PlaylistTrackDbConverter
+import com.example.playlistmaker.media.data.converters.PlaylistWithTracksDbConverter
 import com.example.playlistmaker.media.data.db.entity.PlaylistEntity
+import com.example.playlistmaker.media.data.db.entity.PlaylistTrackEntity
 import com.example.playlistmaker.media.domain.api.PlaylistsRepository
 import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.PlaylistWithTracks
+import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
@@ -16,6 +21,8 @@ import java.io.InputStream
 class PlaylistsRepositoryImpl(
     private val appDb: AppDb,
     private val playlistDbConvertor: PlaylistDbConverter,
+    private val playlistTrackDbConverter: PlaylistTrackDbConverter,
+    private val playlistWithTracksDbConverter: PlaylistWithTracksDbConverter
 ) : PlaylistsRepository {
 
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
@@ -24,17 +31,31 @@ class PlaylistsRepositoryImpl(
         emit(convertFromPlaylistEntity(playlists))
     }
 
-    override fun createPlaylist(playlist: Playlist): Flow<Unit> = flow {
-        emit(appDb.playlistsDao().createPlaylist(playlistDbConvertor.map(playlist)))
+    override fun getPlaylistWithTracks(playlistId: Long): Flow<PlaylistWithTracks> = flow {
+        val data = appDb.playlistsDao().getPlaylistWithTracks(playlistId)
+
+        emit(playlistWithTracksDbConverter.map(data))
     }
 
-    override fun insertTrackIdInPlaylistIfNotExists(
-        playlistId: Long,
-        trackId: String
-    ): Flow<Playlist?> = flow {
-        val playlist = appDb.playlistsDao().insertTrackIdInPlaylistIfNotExists(playlistId, trackId)
+    override fun insertPlaylist(playlist: Playlist): Flow<Playlist> = flow {
+        val playlist = appDb.playlistsDao().insertPlaylist(playlistDbConvertor.map(playlist))
+
+        emit(playlistDbConvertor.map(playlist))
+    }
+
+    override fun insertPlaylistTrack(playlistId: Long, track: Track): Flow<Playlist?> = flow {
+        val playlist = appDb.playlistsDao()
+            .insertPlaylistTrack(playlistId, playlistTrackDbConverter.map(track))
 
         emit(if (playlist != null) playlistDbConvertor.map(playlist) else null)
+    }
+
+    override fun deletePlaylist(playlistId: Long) {
+        appDb.playlistsDao().deletePlaylist(playlistId)
+    }
+
+    override fun deletePlaylistTrack(playlistId: Long, trackId: String) {
+        appDb.playlistsDao().deletePlaylistTrack(playlistId, trackId)
     }
 
     override fun savePlaylistImageInStorage(
@@ -63,5 +84,9 @@ class PlaylistsRepositoryImpl(
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
         return playlists.map { playlist -> playlistDbConvertor.map(playlist) }
+    }
+
+    private fun convertFromPlaylistTrackEntity(tracks: List<PlaylistTrackEntity>): List<Track> {
+        return tracks.map { track -> playlistTrackDbConverter.map(track) }
     }
 }

@@ -49,6 +49,13 @@
             app:exitAnim="@anim/hold"
             app:popEnterAnim="@anim/hold"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mediaFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/hold"
+            app:popEnterAnim="@anim/hold"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -57,7 +64,23 @@
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/mediaPlaylistCreatorFragment"
-        android:name="com.example.playlistmaker.playlist_creator.ui.fragments.MediaPlaylistCreatorFragment"
+        android:name="com.example.playlistmaker.playlist_creator.ui.fragments.PlaylistCreatorFragment"
         android:label="fragment_playlist_creator"
         tools:layout="@layout/fragment_playlist_creator" />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.example.playlistmaker.playlist.ui.fragments.PlaylistFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist">
+        <action
+            android:id="@+id/action_playlistFragment_to_playerFragment"
+            app:destination="@id/playerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/hold"
+            app:popEnterAnim="@anim/hold"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_playlistFragment_to_mediaPlaylistCreatorFragment"
+            app:destination="@id/mediaPlaylistCreatorFragment" />
+    </fragment>
 </navigation>

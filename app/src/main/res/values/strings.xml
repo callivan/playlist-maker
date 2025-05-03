@@ -35,17 +35,38 @@
     <string name="create_playlist">Создать</string>
     <string name="add_in_playlist">Добавить в плейлист</string>
     <string name="playlist_created">Плейлист %s создан</string>
+    <string name="playlist_updated">Плейлист %s изменен</string>
     <string name="track_add_in_playlist">Добавлено в плейлист %s</string>
     <string name="track_exists_in_playlist">Трек уже добавлен в плейлист %s</string>
     <string name="modal_end_playlist_creating_title">Завершить создание плейлиста?</string>
     <string name="modal_end_playlist_creating_text">Все несохраненные данные будут потеряны</string>
     <string name="cancel">Отмена</string>
     <string name="end">Завершить</string>
+    <string name="modal_delete_track_title">Удалить трек</string>
+    <string name="modal_want_delete_track_text">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="delete">Удалить</string>
+    <string name="ok">Ок</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="playlist_empty">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="playlist_share">Поделиться</string>
+    <string name="playlist_delete">Удалить плейлист</string>
+    <string name="want_delete_playlist">Хотите удалить плейлист?</string>
+    <string name="playlist_update">Редактировать информацию</string>
+    <string name="playlist_update_title">Редактировать</string>
+    <string name="save">Сохранить</string>
 
     <plurals name="tracks_count">
         <item quantity="one">%d трек</item>
         <item quantity="few">%d трека</item>
         <item quantity="many">%d треков</item>
         <item quantity="other">%d треков</item>
+    </plurals>
+
+    <plurals name="minutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d+ минут</item>
     </plurals>
 </resources>

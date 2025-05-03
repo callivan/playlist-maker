@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playerFragment, R.id.mediaPlaylistCreatorFragment -> {
+                R.id.playerFragment, R.id.mediaPlaylistCreatorFragment, R.id.playlistFragment -> {
                     binding.bottomMenu.isVisible = false
                     binding.divider.isVisible = false
                 }

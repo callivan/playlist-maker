@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="text_size_lx">24sp</dimen>
     <dimen name="text_size_l">22sp</dimen>
     <dimen name="text_size_b">20sp</dimen>
+    <dimen name="text_size_mx">18sp</dimen>
     <dimen name="text_size_m">16sp</dimen>
     <dimen name="text_size_xm">14sp</dimen>
     <dimen name="text_size_s">12sp</dimen>
+    <dimen name="line_height_lx">28sp</dimen>
     <dimen name="line_height_l">26sp</dimen>
     <dimen name="line_height_b">22sp</dimen>
+    <dimen name="line_height_mx">20sp</dimen>
     <dimen name="line_height_m">18sp</dimen>
     <dimen name="line_height_xm">16sp</dimen>
     <dimen name="line_height_s">14sp</dimen>

@@ -1,8 +1,11 @@
 package com.example.playlistmaker.di
 
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.playlistmaker.consts.Const
 import com.example.playlistmaker.media.data.converters.PlaylistDbConverter
+import com.example.playlistmaker.media.data.converters.PlaylistTrackDbConverter
+import com.example.playlistmaker.media.data.converters.PlaylistWithTracksDbConverter
 import com.example.playlistmaker.media.data.converters.TrackDbConverter
 import com.example.playlistmaker.media.data.db.AppDb
 import com.example.playlistmaker.search.data.History
@@ -23,6 +26,10 @@ val dataModule = module {
     factory<TrackDbConverter> { TrackDbConverter() }
 
     factory<PlaylistDbConverter> { PlaylistDbConverter() }
+
+    factory<PlaylistTrackDbConverter> { PlaylistTrackDbConverter() }
+
+    factory<PlaylistWithTracksDbConverter> { PlaylistWithTracksDbConverter() }
 
     single<AppDb> {
         Room.databaseBuilder(androidContext(), AppDb::class.java, "database")

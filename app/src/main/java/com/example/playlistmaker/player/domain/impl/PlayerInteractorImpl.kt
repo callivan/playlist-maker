@@ -1,11 +1,10 @@
 package com.example.playlistmaker.player.domain.impl
 
 import com.example.playlistmaker.media.domain.models.FavoriteInteractor
-import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.domain.models.PlaylistsInteractor
 import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.player.domain.models.PlayerInteractor
-import com.example.playlistmaker.player.domain.models.PlayerPlaylist
+import com.example.playlistmaker.player.domain.models.Playlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -26,22 +25,26 @@ class PlayerInteractorImpl(
         return favoriteInteractor.deleteFavoriteTrackById(id)
     }
 
-    override fun getPlaylists(): Flow<List<PlayerPlaylist>> {
+    override fun getPlaylists(): Flow<List<Playlist>> {
         return playlistsInteractor.getPlaylists()
-            .map { playlists -> playlists.map { playlist -> convertFromPlaylist(playlist) } }
+            .map { playlists -> convertFromPlaylist(playlists) }
     }
 
-    override fun insertTrackIdInPlaylistIfNotExists(
-        playlistId: Long,
-        trackId: String
-    ): Flow<PlayerPlaylist?> {
-        val playlist = playlistsInteractor.insertTrackIdInPlaylistIfNotExists(playlistId, trackId)
-        return playlist.map { p -> if (p != null) convertFromPlaylist(p) else null }
+    override fun insertPlaylistTrack(playlistId: Long, track: Track): Flow<Playlist?> {
+        return playlistsInteractor.insertPlaylistTrack(playlistId, convertFromTrack(track))
+            .map { playlist ->
+                if (playlist != null) Playlist(
+                    id = playlist.id,
+                    name = playlist.name,
+                    description = playlist.description,
+                    tracksCount = playlist.tracksCount,
+                    img = playlist.img
+                ) else null
+            }
     }
 
     private fun convertFromTrack(track: Track): com.example.playlistmaker.media.domain.models.Track {
         return com.example.playlistmaker.media.domain.models.Track(
-            id = track.id,
             country = track.country,
             trackId = track.trackId,
             trackName = track.trackName,
@@ -55,13 +58,15 @@ class PlayerInteractorImpl(
         )
     }
 
-    private fun convertFromPlaylist(playerPlaylist: Playlist): PlayerPlaylist {
-        return PlayerPlaylist(
-            id = playerPlaylist.id,
-            name = playerPlaylist.name,
-            description = playerPlaylist.description,
-            tracksId = playerPlaylist.tracksId,
-            img = playerPlaylist.img
-        )
+    private fun convertFromPlaylist(playlists: List<com.example.playlistmaker.media.domain.models.Playlist>): List<Playlist> {
+        return playlists.map { playlist ->
+            Playlist(
+                id = playlist.id,
+                name = playlist.name,
+                description = playlist.description,
+                tracksCount = playlist.tracksCount,
+                img = playlist.img
+            )
+        }
     }
 }

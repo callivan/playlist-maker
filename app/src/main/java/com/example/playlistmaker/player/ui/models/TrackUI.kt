@@ -3,15 +3,14 @@ package com.example.playlistmaker.player.ui.models
 import java.util.Date
 
 data class TrackUI(
-    val id: Long,
-    val previewUrl: String,
-    val trackId: String,
-    val trackName: String,
-    val artistName: String,
-    val trackTimeMillis: Long,
-    val artworkUrl100: String,
-    val collectionName: String?,
-    val releaseDate: Date,
-    val primaryGenreName: String,
-    val country: String,
+    val previewUrl: String = "",
+    val trackId: String = "",
+    val trackName: String = "",
+    val artistName: String = "",
+    val trackTimeMillis: Long = 0L,
+    val artworkUrl100: String = "",
+    val collectionName: String? = null,
+    val releaseDate: Date = Date(),
+    val primaryGenreName: String = "",
+    val country: String = "",
 )

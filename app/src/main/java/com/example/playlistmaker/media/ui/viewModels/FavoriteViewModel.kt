@@ -15,7 +15,7 @@ class FavoriteViewModel(
 ) : ViewModel() {
 
     private val favoriteSearchScreenStateLiveData =
-        MutableLiveData<FavoriteScreenState>(FavoriteScreenState.Loading)
+        MutableLiveData<FavoriteScreenState>(FavoriteScreenState.Empty)
 
     fun getFavoriteScreenStateLiveData(): LiveData<FavoriteScreenState> =
         favoriteSearchScreenStateLiveData
@@ -28,7 +28,6 @@ class FavoriteViewModel(
                 if (tracks.isNotEmpty()) {
                     favoriteSearchScreenStateLiveData.postValue(FavoriteScreenState.Content(tracks.map { track ->
                         TrackUI(
-                            id = track.id,
                             country = track.country,
                             trackId = track.trackId,
                             trackName = track.trackName,

@@ -9,7 +9,7 @@ interface PlayerInteractor {
 
     fun insertFavoriteTrack(track: Track): Flow<Unit>
 
-    fun getPlaylists(): Flow<List<PlayerPlaylist>>
+    fun getPlaylists(): Flow<List<Playlist>>
 
-    fun insertTrackIdInPlaylistIfNotExists(playlistId: Long, trackId: String): Flow<PlayerPlaylist?>
+    fun insertPlaylistTrack(playlistId: Long, track: Track): Flow<Playlist?>
 }

@@ -33,7 +33,7 @@ class PlaylistsViewModel(
                                     id = playlist.id,
                                     name = playlist.name,
                                     description = playlist.description,
-                                    tracksId = playlist.tracksId,
+                                    tracksCount = playlist.tracksCount,
                                     img = playlist.img
                                 )
                             })

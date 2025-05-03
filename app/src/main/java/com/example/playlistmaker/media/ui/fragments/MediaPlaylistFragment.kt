@@ -4,19 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
+import com.example.playlistmaker.consts.Const
 import com.example.playlistmaker.databinding.FragmentMediaPlaylistBinding
 import com.example.playlistmaker.media.ui.adapters.PlaylistsAdapter
+import com.example.playlistmaker.media.ui.models.PlaylistUI
 import com.example.playlistmaker.media.ui.models.PlaylistsScreenState
 import com.example.playlistmaker.media.ui.viewModels.PlaylistsViewModel
 import com.example.playlistmaker.utils.CustomGridLayoutItemDecoration
 import com.example.playlistmaker.utils.Utils
 import com.example.playlistmaker.utils.Utils.Companion.dpToPx
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
@@ -24,6 +28,8 @@ class MediaPlaylistFragment : Fragment() {
     private val viewModel by viewModel<PlaylistsViewModel>()
 
     private lateinit var binding: FragmentMediaPlaylistBinding
+
+    private var onClick: ((playlist: PlaylistUI) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +44,14 @@ class MediaPlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getPlaylists()
+
+        onClick = Utils.debounce<PlaylistUI>(
+            300L,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { playlist ->
+            onClickPlaylist(playlist)
+        }
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.addItemDecoration(
@@ -67,7 +81,10 @@ class MediaPlaylistFragment : Fragment() {
                         binding.progressBar.isVisible = false
                         binding.emptyLayout.isVisible = false
                         binding.recyclerView.isVisible = true
-                        binding.recyclerView.adapter = PlaylistsAdapter(state.playlists)
+                        binding.recyclerView.adapter =
+                            PlaylistsAdapter(
+                                playlists = state.playlists,
+                                onClick = { playlist -> onClick?.let { it(playlist) } })
                     }
                 }
             }
@@ -78,5 +95,14 @@ class MediaPlaylistFragment : Fragment() {
                 findNavController().navigate(R.id.action_mediaFragment_to_mediaPlaylistCreatorFragment)
             }(Unit)
         }
+    }
+
+    private fun onClickPlaylist(playlist: PlaylistUI) {
+        findNavController().navigate(
+            R.id.action_mediaFragment_to_playlistFragment,
+            bundleOf(
+                Const.PLAYLIST to Gson().toJson(playlist)
+            )
+        )
     }
 }

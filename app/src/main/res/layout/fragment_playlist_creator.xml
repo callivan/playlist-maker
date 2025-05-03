@@ -7,7 +7,7 @@
     android:layout_marginBottom="32dp"
     android:background="?attr/colorSecondary"
     android:fitsSystemWindows="true"
-    tools:context=".playlist_creator.ui.fragments.MediaPlaylistCreatorFragment">
+    tools:context=".playlist_creator.ui.fragments.PlaylistCreatorFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/back"
@@ -39,8 +39,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/back"
-        app:layout_constraintVertical_bias="0"
-        app:navigationIcon="@drawable/arrow_left" />
+        app:layout_constraintVertical_bias="0" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name"

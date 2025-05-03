@@ -9,7 +9,7 @@ data class PlaylistEntity(
     val id: Long,
     val timestamp: Long = System.currentTimeMillis(),
     val name: String,
-    val tracksId: MutableList<String> = mutableListOf(),
+    val tracksCount: Int,
     val description: String? = null,
     val img: String? = null
 )

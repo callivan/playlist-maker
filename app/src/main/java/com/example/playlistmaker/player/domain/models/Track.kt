@@ -3,7 +3,6 @@ package com.example.playlistmaker.player.domain.models
 import java.util.Date
 
 data class Track(
-    val id: Long,
     val previewUrl: String,
     val trackId: String,
     val trackName: String,

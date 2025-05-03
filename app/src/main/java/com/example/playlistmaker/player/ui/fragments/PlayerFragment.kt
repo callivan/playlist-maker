@@ -30,6 +30,8 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.Long
+import kotlin.String
 
 class PlayerFragment : Fragment() {
     private val viewModel by viewModel<PlayerViewModel>()
@@ -38,7 +40,7 @@ class PlayerFragment : Fragment() {
 
     private var onClickPlaylistDebounce: ((playlist: PlaylistUI) -> Unit)? = null
 
-    private var trackId: String = ""
+    private var track: TrackUI = TrackUI()
 
     private val utils = Utils
 
@@ -85,13 +87,9 @@ class PlayerFragment : Fragment() {
                 0f,
                 0f
             )
-
-
         }
 
-        val track = Gson().fromJson(arguments?.getString(Const.TRACK), TrackUI::class.java)
-
-        trackId = track.trackId
+        track = Gson().fromJson(arguments?.getString(Const.TRACK), TrackUI::class.java)
 
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .centerCrop().placeholder(R.drawable.placeholder).into(binding.trackImage)
@@ -235,16 +233,18 @@ class PlayerFragment : Fragment() {
             Utils.debounce<Unit>(300L, viewLifecycleOwner.lifecycleScope, false) {
                 findNavController().navigate(
                     R.id.action_playerFragment_to_mediaPlaylistCreatorFragment, bundleOf(
-                        Const.TRACK_ID to track.trackId
+                        Const.TRACK to Gson().toJson(track)
                     )
                 )
+
+                viewModel.cleanBottomSheetScreenStateLiveData()
 
             }(Unit)
         }
     }
 
     private fun onClickPlaylist(playlist: PlaylistUI) {
-        viewModel.insertTrackIdInPlaylist(playlist = playlist, trackId = trackId)
+        viewModel.insertPlaylistTrack(playlist = playlist, track = track)
     }
 
     private fun printFavoriteBtn(state: Boolean) {

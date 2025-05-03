@@ -12,11 +12,9 @@ class PlaylistsViewHolder(private val binding: PlaylistVerticalViewBinding) :
     private val glide = Glide.with(itemView)
 
     fun bind(model: PlaylistUI) {
-        val tracksCount = model.tracksId.size
-
         binding.playlistName.text = model.name
         binding.playlistTracksCount.text = binding.root.context.resources.getQuantityString(
-            R.plurals.tracks_count, tracksCount, tracksCount
+            R.plurals.tracks_count, model.tracksCount, model.tracksCount
         )
 
         glide.load(model.img).centerCrop().placeholder(R.drawable.placeholder)

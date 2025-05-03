@@ -3,7 +3,6 @@ package com.example.playlistmaker.media.data.dto
 import java.util.Date
 
 data class TrackDto(
-    val id: Long,
     val previewUrl: String,
     val trackId: String,
     val trackName: String,

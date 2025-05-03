@@ -9,7 +9,7 @@ class PlaylistDbConverter {
         return PlaylistEntity(
             id = playlist.id,
             name = playlist.name,
-            tracksId = playlist.tracksId,
+            tracksCount = playlist.tracksCount,
             description = playlist.description,
             img = playlist.img
         )
@@ -19,7 +19,7 @@ class PlaylistDbConverter {
         return Playlist(
             id = playlist.id,
             name = playlist.name,
-            tracksId = playlist.tracksId,
+            tracksCount = playlist.tracksCount,
             description = playlist.description,
             img = playlist.img
         )
@@ -29,7 +29,7 @@ class PlaylistDbConverter {
         return PlaylistEntity(
             id = playlist.id,
             name = playlist.name,
-            tracksId = playlist.tracksId,
+            tracksCount = playlist.tracksCount,
             description = playlist.description,
             img = playlist.img
         )

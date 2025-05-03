@@ -1,7 +1,5 @@
 package com.example.playlistmaker.search.ui.viewModels
 
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +9,7 @@ import com.example.playlistmaker.search.domain.models.TracksHistoryIntercator
 import com.example.playlistmaker.search.domain.models.TracksInteractor
 import com.example.playlistmaker.search.ui.models.TrackUI
 import com.example.playlistmaker.search.ui.models.TracksSearchScreenState
+import com.example.playlistmaker.utils.CustomTextWatcher
 import com.example.playlistmaker.utils.Utils
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -69,25 +68,13 @@ class SearchViewModel(
         }
     }
 
-    fun textWatcher(): TextWatcher {
-        return object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
+    fun textWatcher() = CustomTextWatcher.customTextWatcher { s ->
+        inputTextLiveData.postValue(s.toString())
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                inputTextLiveData.postValue(s.toString())
-
-                if (s.toString().isEmpty()) {
-                    tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Init)
-                } else {
-                    onGetTracks(s.toString())
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
+        if (s.toString().isEmpty()) {
+            tracksSearchScreenStateLiveData.postValue(TracksSearchScreenState.Init)
+        } else {
+            onGetTracks(s.toString())
         }
     }
 

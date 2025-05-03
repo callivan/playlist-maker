@@ -24,7 +24,7 @@ class FavoriteViewModel(
         favoriteSearchScreenStateLiveData.postValue(FavoriteScreenState.Loading)
 
         viewModelScope.launch(Dispatchers.IO) {
-            favoriteInteractor.getTracks().collect { tracks ->
+            favoriteInteractor.getFavoriteTracks().collect { tracks ->
                 if (tracks.isNotEmpty()) {
                     favoriteSearchScreenStateLiveData.postValue(FavoriteScreenState.Content(tracks.map { track ->
                         TrackUI(

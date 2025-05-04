@@ -194,6 +194,31 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <LinearLayout
+            android:id="@+id/emptyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="118dp"
+                android:layout_marginBottom="@dimen/indent_m"
+                android:contentDescription="@string/playlist"
+                android:scaleType="centerCrop"
+                android:src="@drawable/empty" />
+
+            <TextView
+                style="@style/textB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/playlist_empty_tracks"
+                android:textAlignment="center" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

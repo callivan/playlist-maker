@@ -25,8 +25,23 @@ interface PlaylistsDao {
     fun getPlaylistById(playlistId: Long): PlaylistEntity
 
     @Transaction
-    @Query("SELECT * FROM playlist_table WHERE id = :playlistId")
-    fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracksEntity
+    @Query(
+        """SELECT  playlist_track_table.*, playlistId_trackId_table.timestamp
+              FROM playlist_track_table
+              INNER JOIN playlistId_trackId_table ON playlist_track_table.trackId = playlistId_trackId_table.trackId
+              WHERE playlistId_trackId_table.playlistId = :playlistId
+              ORDER BY playlistId_trackId_table.timestamp DESC
+    """
+    )
+    fun getPlaylistTracks(playlistId: Long): List<PlaylistTrackEntity>
+
+    @Transaction
+    fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracksEntity {
+        val playlist = getPlaylistById(playlistId)
+        val tracks = getPlaylistTracks(playlistId)
+
+        return PlaylistWithTracksEntity(playlist = playlist, tracks = tracks)
+    }
 
     @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun insertPlaylistAndReturnId(playlist: PlaylistEntity): Long

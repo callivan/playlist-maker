@@ -58,7 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textCursorDrawable="@color/blue" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -78,7 +79,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textCursorDrawable="@color/blue" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

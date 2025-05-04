@@ -93,15 +93,15 @@ class PlaylistFragment : Fragment() {
             requireActivity().runOnUiThread {
                 when (state) {
                     is PlaylistScreenState.Empty -> {
-                        binding.playlistBottomSheet.isVisible = false
                         binding.progressBar.isVisible = false
                         binding.recyclerView.isVisible = false
+                        binding.emptyLayout.isVisible = false
                     }
 
                     is PlaylistScreenState.Loading -> {
-                        binding.playlistBottomSheet.isVisible = false
                         binding.progressBar.isVisible = true
                         binding.recyclerView.isVisible = false
+                        binding.emptyLayout.isVisible = false
                     }
 
                     is PlaylistScreenState.Content -> {
@@ -110,9 +110,9 @@ class PlaylistFragment : Fragment() {
                         val playlistMinutesCount =
                             TimeUnit.MILLISECONDS.toMinutes(tracks.sumOf { it.trackTimeMillis })
 
-                        binding.playlistBottomSheet.isVisible = state.state.tracks.isNotEmpty()
+                        binding.emptyLayout.isVisible = tracks.isEmpty()
                         binding.progressBar.isVisible = false
-                        binding.recyclerView.isVisible = true
+                        binding.recyclerView.isVisible = tracks.isNotEmpty()
                         binding.recyclerView.adapter = TracksAdapter(
                             tracks = tracks,
                             onClick = { track -> onClick?.let { it(track) } },
@@ -155,7 +155,8 @@ class PlaylistFragment : Fragment() {
 
                         binding.btnMenuUpdate.setOnClickListener {
                             findNavController().navigate(
-                                R.id.action_playlistFragment_to_mediaPlaylistCreatorFragment, bundleOf(
+                                R.id.action_playlistFragment_to_mediaPlaylistCreatorFragment,
+                                bundleOf(
                                     Const.PLAYLIST to Gson().toJson(playlist)
                                 )
                             )

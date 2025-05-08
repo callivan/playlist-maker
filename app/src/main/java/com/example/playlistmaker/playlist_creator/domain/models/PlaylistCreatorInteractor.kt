@@ -5,9 +5,9 @@ import java.io.File
 import java.io.InputStream
 
 interface PlaylistCreatorInteractor {
-    fun createPlaylist(playlist: Playlist): Flow<Unit>
+    fun insertPlaylist(playlist: Playlist): Flow<Playlist>
 
-    fun insertTrackIdInPlaylistIfNotExists(playlistId: Long, trackId: String): Flow<Playlist?>
+    fun insertPlaylistTrack(playlistId: Long, track: Track): Flow<Playlist?>
 
     fun savePlaylistImageInStorage(inputStream: InputStream?, filesDir: File?): Flow<File>
 }

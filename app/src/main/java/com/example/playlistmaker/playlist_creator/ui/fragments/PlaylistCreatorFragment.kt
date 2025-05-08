@@ -18,17 +18,20 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.consts.Const
 import com.example.playlistmaker.databinding.FragmentPlaylistCreatorBinding
 import com.example.playlistmaker.playlist_creator.ui.models.PlaylistCreatorScreenState
+import com.example.playlistmaker.playlist_creator.ui.models.PlaylistUI
+import com.example.playlistmaker.playlist_creator.ui.models.TrackUI
 import com.example.playlistmaker.playlist_creator.ui.viewModels.PlaylistCreatorViewModel
 import com.example.playlistmaker.utils.CustomDrawers
 import com.example.playlistmaker.utils.CustomSnackbar
 import com.example.playlistmaker.utils.Utils.Companion.dpToPx
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.InputStream
 import kotlin.getValue
 
-class MediaPlaylistCreatorFragment() : Fragment() {
+class PlaylistCreatorFragment() : Fragment() {
     private val viewModel by viewModel<PlaylistCreatorViewModel>()
 
     private lateinit var binding: FragmentPlaylistCreatorBinding
@@ -57,7 +60,23 @@ class MediaPlaylistCreatorFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val trackId = arguments?.getString(Const.TRACK_ID)
+        val track: TrackUI? =
+            Gson().fromJson(arguments?.getString(Const.TRACK), TrackUI::class.java)
+
+        val playlist: PlaylistUI? = Gson().fromJson(
+            arguments?.getString(Const.PLAYLIST),
+            PlaylistUI::class.java
+        )
+
+        if (playlist != null) {
+            viewModel.setPlaylistData(playlist)
+
+            binding.btnCreate.text = getString(R.string.save)
+            binding.back.title = getString(R.string.playlist_update_title)
+
+            binding.editNameText.setText(playlist.name)
+            binding.editDescriptionText.setText(playlist.description)
+        }
 
         val alertDialog = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.modal_end_playlist_creating_title))
@@ -86,13 +105,14 @@ class MediaPlaylistCreatorFragment() : Fragment() {
                     }
 
                     is PlaylistCreatorScreenState.ChangeData -> {
-                        binding.btnCreate.isEnabled = state.playlist.name.isNotEmpty()
-
-
-                        showAlertDialog =
+                        showAlertDialog = if (playlist != null) false else
                             (state.playlist.img != null && state.playlist.img!!.isNotEmpty()) || state.playlist.name.isNotEmpty() || (state.playlist.description != null && state.playlist.description!!.isNotEmpty())
 
-                        Glide.with(requireContext()).load(state.playlist.img?.toUri())
+                        binding.btnCreate.isEnabled = if (playlist != null)
+                            playlist.img != state.playlist.img || playlist.name != state.playlist.name || playlist.description != state.playlist.description else state.playlist.name.isNotEmpty()
+
+                        Glide.with(requireContext())
+                            .load(if (playlist != null && playlist.img == state.playlist.img) playlist.img else state.playlist.img?.toUri())
                             .encodeFormat(Bitmap.CompressFormat.WEBP).encodeQuality(70)
                             .override(binding.btnAddImage.width, binding.btnAddImage.height)
                             .centerCrop().placeholder(R.drawable.add_image)
@@ -101,7 +121,7 @@ class MediaPlaylistCreatorFragment() : Fragment() {
                         fileDir =
                             requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-                        if (state.playlist.img != null) {
+                        if (playlist?.img != state.playlist.img && state.playlist.img != null) {
                             inputStream =
                                 requireContext().contentResolver.openInputStream(state.playlist.img!!.toUri())
                         }
@@ -110,7 +130,10 @@ class MediaPlaylistCreatorFragment() : Fragment() {
                     is PlaylistCreatorScreenState.Created -> {
                         snackbar = CustomSnackbar.createSnackbar(
                             requireView(),
-                            getString(R.string.playlist_created, state.playlists.name)
+                            getString(
+                                if (playlist != null) R.string.playlist_updated else R.string.playlist_created,
+                                state.playlists.name
+                            )
                         )
 
                         findNavController().navigateUp()
@@ -147,11 +170,7 @@ class MediaPlaylistCreatorFragment() : Fragment() {
         binding.editDescriptionText.addTextChangedListener(viewModel.descriptionTextWatcher())
 
         binding.btnCreate.setOnClickListener {
-            if (trackId != null) {
-                viewModel.setTrackId(trackId)
-            }
-
-            viewModel.createPlaylist(filesDir = fileDir, inputStream = inputStream)
+            viewModel.createPlaylist(track = track, filesDir = fileDir, inputStream = inputStream)
         }
 
         binding.back.setOnClickListener {

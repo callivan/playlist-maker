@@ -6,6 +6,8 @@ import com.example.playlistmaker.media.ui.viewModels.FavoriteViewModel
 import com.example.playlistmaker.media.ui.viewModels.PlaylistsViewModel
 import com.example.playlistmaker.player.domain.models.PlayerInteractor
 import com.example.playlistmaker.player.ui.viewModels.PlayerViewModel
+import com.example.playlistmaker.playlist.domain.models.PlaylistInteractor
+import com.example.playlistmaker.playlist.ui.viewModels.PlaylistViewModel
 import com.example.playlistmaker.playlist_creator.domain.models.PlaylistCreatorInteractor
 import com.example.playlistmaker.playlist_creator.ui.viewModels.PlaylistCreatorViewModel
 import com.example.playlistmaker.search.domain.models.TracksHistoryIntercator
@@ -40,4 +42,6 @@ val viewModelModule = module {
     viewModel<PlaylistCreatorViewModel> {
         PlaylistCreatorViewModel(get<PlaylistCreatorInteractor>())
     }
+
+    viewModel<PlaylistViewModel> { PlaylistViewModel(get<PlaylistInteractor>()) }
 }

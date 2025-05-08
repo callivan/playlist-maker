@@ -1,7 +1,7 @@
 package com.example.playlistmaker.media.data.db
 
 import com.example.playlistmaker.media.data.converters.TrackDbConverter
-import com.example.playlistmaker.media.data.db.entity.TrackEntity
+import com.example.playlistmaker.media.data.db.entity.FavoriteTrackEntity
 import com.example.playlistmaker.media.domain.api.FavoriteRepository
 import com.example.playlistmaker.media.domain.models.Track
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +15,7 @@ class FavoriteRepositoryImpl(
     override fun getFavoriteTracks(): Flow<List<Track>> = flow {
         val tracks = appDb.favoriteDao().getFavoriteTracks()
 
-        emit(convertFromTrackEntity(tracks))
+        emit(convertFromFavoriteTrackEntity(tracks))
     }
 
     override fun existsFavoriteTrackById(id: String): Flow<Boolean> = flow {
@@ -30,7 +30,7 @@ class FavoriteRepositoryImpl(
         emit(appDb.favoriteDao().deleteFavoriteTrackById(id))
     }
 
-    private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {
+    private fun convertFromFavoriteTrackEntity(tracks: List<FavoriteTrackEntity>): List<Track> {
         return tracks.map { track -> trackDbConvertor.map(track) }
     }
 }

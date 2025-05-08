@@ -15,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 const val PLAYER_PROGRESS_DELAY = 300L
@@ -88,7 +87,6 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewMode
         viewModelScope.launch(Dispatchers.IO) {
             playerInteractor.insertFavoriteTrack(
                 Track(
-                    id = track.id,
                     country = track.country,
                     trackId = track.trackId,
                     trackName = track.trackName,
@@ -129,7 +127,7 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewMode
                                     id = playlist.id,
                                     name = playlist.name,
                                     description = playlist.description,
-                                    tracksId = playlist.tracksId,
+                                    tracksCount = playlist.tracksCount,
                                     img = playlist.img
                                 )
                             })
@@ -141,15 +139,15 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewMode
         }
     }
 
-    fun insertTrackIdInPlaylist(playlist: PlaylistUI, trackId: String): Unit {
+    fun insertPlaylistTrack(playlist: PlaylistUI, track: TrackUI): Unit {
         viewModelScope.launch(Dispatchers.IO) {
-            playerInteractor.insertTrackIdInPlaylistIfNotExists(playlist.id, trackId)
+            playerInteractor.insertPlaylistTrack(playlist.id, convertFromTrackUI(track))
                 .collect { state ->
                     val p = if (state != null) PlaylistUI(
                         id = state.id,
                         name = state.name,
                         description = state.description,
-                        tracksId = state.tracksId,
+                        tracksCount = state.tracksCount,
                         img = state.img
                     ) else playlist
 
@@ -163,7 +161,26 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewMode
         }
     }
 
+    fun cleanBottomSheetScreenStateLiveData() {
+        bottomSheetSearchScreenStateLiveData.postValue(BottomSheetScreenState.Empty)
+    }
+
     override fun onCleared() {
         release()
+    }
+
+    private fun convertFromTrackUI(track: TrackUI): Track {
+        return Track(
+            country = track.country,
+            trackId = track.trackId,
+            trackName = track.trackName,
+            previewUrl = track.previewUrl,
+            artistName = track.artistName,
+            releaseDate = track.releaseDate,
+            artworkUrl100 = track.artworkUrl100,
+            collectionName = track.collectionName,
+            trackTimeMillis = track.trackTimeMillis,
+            primaryGenreName = track.primaryGenreName,
+        )
     }
 }

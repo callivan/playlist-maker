@@ -3,7 +3,6 @@ package com.example.playlistmaker.media.ui.models
 import java.util.Date
 
 data class TrackUI(
-    val id: Long,
     val previewUrl: String,
     val trackId: String,
     val trackName: String,
